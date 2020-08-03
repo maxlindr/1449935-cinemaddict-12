@@ -1,7 +1,7 @@
 # Личный проект «Киноман» [![Build status][travis-image]][travis-url]
 
 * Студент: [Максим Тимофеев](https://up.htmlacademy.ru/ecmascript/12/user/1449935).
-* Наставник: [Валерий Овечкин](https://htmlacademy.ru/profile/id1432451).
+* Наставник: [Сергей Вохмянин](https://htmlacademy.ru/profile/id530823).
 
 ---
 
