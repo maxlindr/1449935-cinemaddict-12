@@ -1,14 +1,13 @@
 const calcRank = (rating) => {
-  switch (true) {
-    case rating === 0:
-      return ``;
-    case rating <= 10:
-      return `novice`;
-    case rating <= 20:
-      return `fan`;
-    default:
-      return `movie buff`;
+  if (rating === 0) {
+    return ``;
+  } else if (rating <= 10) {
+    return `novice`;
+  } else if (rating <= 20) {
+    return `fan`;
   }
+
+  return `movie buff`;
 };
 
 export const createProfileTemplate = (rating, avatarUrl) => {
