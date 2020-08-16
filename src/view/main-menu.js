@@ -1,4 +1,6 @@
-export const createMainMenuTemplate = (filters) => {
+import {createElement} from '../utils.js';
+
+const createMainMenuTemplate = (filters) => {
   return (
     `<nav class="main-navigation">
       <div class="main-navigation__items">
@@ -11,3 +13,26 @@ export const createMainMenuTemplate = (filters) => {
     </nav>`
   );
 };
+
+export default class MainMenuView {
+  constructor(filters) {
+    this._element = null;
+    this._filters = filters;
+  }
+
+  getTemplate() {
+    return createMainMenuTemplate(this._filters);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

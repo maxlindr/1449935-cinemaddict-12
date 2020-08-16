@@ -1,3 +1,5 @@
+import {createElement} from '../utils.js';
+
 const calcRank = (rating) => {
   if (rating === 0) {
     return ``;
@@ -10,7 +12,7 @@ const calcRank = (rating) => {
   return `movie buff`;
 };
 
-export const createProfileTemplate = (rating, avatarUrl) => {
+const createProfileTemplate = (rating, avatarUrl) => {
   return (
     `<section class="header__profile profile">
       <p class="profile__rating">${calcRank(rating)}</p>
@@ -18,3 +20,26 @@ export const createProfileTemplate = (rating, avatarUrl) => {
     </section>`
   );
 };
+
+export default class ProfileView {
+  constructor(rating, avatarUrl) {
+    this._rating = rating;
+    this._avatarUrl = avatarUrl;
+  }
+
+  getTemplate() {
+    return createProfileTemplate(this._rating, this._avatarUrl);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

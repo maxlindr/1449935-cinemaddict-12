@@ -1,4 +1,4 @@
-import {formatDuration} from '../utils';
+import {createElement, formatDuration} from '../utils.js';
 
 const EMOJIES = {
   angry: {
@@ -78,7 +78,7 @@ const mapComment = (comment) => {
   );
 };
 
-export const createMovieDetailsPopup = (movieDto) => {
+const createMovieDetailsPopupTemplate = (movieDto) => {
   const genreElements = movieDto.genres.map(mapGenre).join(`\n`);
   const commentElements = movieDto.comments.map(mapComment).join(`\n`);
 
@@ -202,3 +202,26 @@ export const createMovieDetailsPopup = (movieDto) => {
     </section>`
   );
 };
+
+export default class MovieDetailsPopup {
+  constructor(movie) {
+    this._element = null;
+    this._movie = movie;
+  }
+
+  getTemplate() {
+    return createMovieDetailsPopupTemplate(this._movie);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

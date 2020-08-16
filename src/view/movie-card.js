@@ -1,8 +1,8 @@
-import {formatDuration} from '../utils';
+import {createElement, formatDuration} from '../utils.js';
 
 const DESCRIPTION_TRIM_THRESHOLD_LENGTH = 140;
 
-export const createMovieCardTemplate = (movieDto) => {
+const createMovieCardTemplate = (movieDto) => {
   const year = movieDto.releaseDate.getFullYear();
   const fullDescription = movieDto.description;
   const shortDescription = fullDescription.length <= DESCRIPTION_TRIM_THRESHOLD_LENGTH
@@ -29,3 +29,26 @@ export const createMovieCardTemplate = (movieDto) => {
     </article>`
   );
 };
+
+export default class MovieCardView {
+  constructor(movie) {
+    this._element = null;
+    this._movie = movie;
+  }
+
+  getTemplate() {
+    return createMovieCardTemplate(this._movie);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
