@@ -52,7 +52,18 @@ const appendMovieToContainer = (container, movie) => {
       const movieDetailsPopupElement = movieDetailsPopupView.getElement();
       const popupCloseBtn = movieDetailsPopupElement.querySelector(`.film-details__close-btn`);
 
-      popupCloseBtn.addEventListener(`click`, () => body.removeChild(movieDetailsPopupElement));
+      const removePopup = () => body.removeChild(movieDetailsPopupElement);
+
+      const escapeKeyDownHandler = (escDownEvt) => {
+        if (escDownEvt.key === `Escape`) {
+          document.removeEventListener(`keydown`, escapeKeyDownHandler);
+          removePopup();
+        }
+      };
+
+      popupCloseBtn.addEventListener(`click`, removePopup);
+      document.addEventListener(`keydown`, escapeKeyDownHandler);
+
       body.appendChild(movieDetailsPopupElement);
     });
   });
