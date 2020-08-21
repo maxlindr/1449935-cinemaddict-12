@@ -40,9 +40,6 @@ const allMovieCardsContainer = allMoviesBoard.querySelector(`.films-list__contai
 const appendMovieToContainer = (container, movie) => {
   const movieCardView = new MovieCardView(movie);
   const movieCardElement = movieCardView.getElement();
-  const cardPosterElement = movieCardElement.querySelector(`.film-card__poster`);
-  const cardTitleElement = movieCardElement.querySelector(`.film-card__title`);
-  const cardCommentsElement = movieCardElement.querySelector(`.film-card__comments`);
 
   const cardElementClickHandler = (evt) => {
     evt.preventDefault();
@@ -66,9 +63,9 @@ const appendMovieToContainer = (container, movie) => {
     body.appendChild(movieDetailsPopupElement);
   };
 
-  [cardPosterElement, cardTitleElement, cardCommentsElement].forEach((element) => {
-    element.addEventListener(`click`, cardElementClickHandler);
-  });
+  movieCardElement
+    .querySelectorAll(`.film-card__poster, .film-card__title, .film-card__comments`)
+    .forEach((element) => element.addEventListener(`click`, cardElementClickHandler));
 
   render(container, movieCardElement, RenderPosition.BEFOREEND);
 };
