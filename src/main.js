@@ -44,28 +44,30 @@ const appendMovieToContainer = (container, movie) => {
   const cardTitleElement = movieCardElement.querySelector(`.film-card__title`);
   const cardCommentsElement = movieCardElement.querySelector(`.film-card__comments`);
 
+  const cardElementClickHandler = (evt) => {
+    evt.preventDefault();
+
+    const movieDetailsPopupView = new MovieDetailsPopupView(movie);
+    const movieDetailsPopupElement = movieDetailsPopupView.getElement();
+    const popupCloseBtn = movieDetailsPopupElement.querySelector(`.film-details__close-btn`);
+
+    const removePopup = () => body.removeChild(movieDetailsPopupElement);
+
+    const escapeKeyDownHandler = (escDownEvt) => {
+      if (escDownEvt.key === `Escape`) {
+        document.removeEventListener(`keydown`, escapeKeyDownHandler);
+        removePopup();
+      }
+    };
+
+    popupCloseBtn.addEventListener(`click`, removePopup);
+    document.addEventListener(`keydown`, escapeKeyDownHandler);
+
+    body.appendChild(movieDetailsPopupElement);
+  };
+
   [cardPosterElement, cardTitleElement, cardCommentsElement].forEach((element) => {
-    element.addEventListener(`click`, (evt) => {
-      evt.preventDefault();
-
-      const movieDetailsPopupView = new MovieDetailsPopupView(movie);
-      const movieDetailsPopupElement = movieDetailsPopupView.getElement();
-      const popupCloseBtn = movieDetailsPopupElement.querySelector(`.film-details__close-btn`);
-
-      const removePopup = () => body.removeChild(movieDetailsPopupElement);
-
-      const escapeKeyDownHandler = (escDownEvt) => {
-        if (escDownEvt.key === `Escape`) {
-          document.removeEventListener(`keydown`, escapeKeyDownHandler);
-          removePopup();
-        }
-      };
-
-      popupCloseBtn.addEventListener(`click`, removePopup);
-      document.addEventListener(`keydown`, escapeKeyDownHandler);
-
-      body.appendChild(movieDetailsPopupElement);
-    });
+    element.addEventListener(`click`, cardElementClickHandler);
   });
 
   render(container, movieCardElement, RenderPosition.BEFOREEND);
