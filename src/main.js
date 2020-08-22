@@ -12,7 +12,7 @@ import {createMovieMock} from './mock/movie-mock';
 import NoMoviesView from './view/no-movies';
 import {createUserProfileMock} from './mock/user-profile-mock';
 import {createFilters} from './mock/filters-mock';
-import {render, RenderPosition} from './utils.js';
+import {render, RenderPosition} from './render.js';
 import ArrayChunkIterator from './array-chunk-iterator';
 
 const ALL_MOVIES_BOARD_CARDS_PORTION_COUNT = 5;
