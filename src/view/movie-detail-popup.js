@@ -1,4 +1,5 @@
-import {createElement, formatDuration} from '../utils.js';
+import AbstractView from './abstract-view';
+import {formatDuration} from '../utils.js';
 
 const EMOJIES = {
   angry: {
@@ -203,25 +204,14 @@ const createMovieDetailsPopupTemplate = (movieDto) => {
   );
 };
 
-export default class MovieDetailsPopup {
+export default class MovieDetailsPopup extends AbstractView {
   constructor(movie) {
+    super();
     this._element = null;
     this._movie = movie;
   }
 
   getTemplate() {
     return createMovieDetailsPopupTemplate(this._movie);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

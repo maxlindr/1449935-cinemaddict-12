@@ -1,4 +1,4 @@
-import {createElement} from '../utils.js';
+import AbstractView from './abstract-view';
 
 const createMoviesSortBarTemplate = () => {
   return (
@@ -10,24 +10,13 @@ const createMoviesSortBarTemplate = () => {
   );
 };
 
-export default class MoviesSortBarView {
+export default class MoviesSortBarView extends AbstractView {
   constructor() {
+    super();
     this._element = null;
   }
 
   getTemplate() {
     return createMoviesSortBarTemplate();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

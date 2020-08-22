@@ -1,4 +1,5 @@
-import {createElement, formatDuration} from '../utils.js';
+import AbstractView from './abstract-view';
+import {formatDuration} from '../utils.js';
 
 const DESCRIPTION_TRIM_THRESHOLD_LENGTH = 140;
 
@@ -30,25 +31,14 @@ const createMovieCardTemplate = (movieDto) => {
   );
 };
 
-export default class MovieCardView {
+export default class MovieCardView extends AbstractView {
   constructor(movie) {
+    super();
     this._element = null;
     this._movie = movie;
   }
 
   getTemplate() {
     return createMovieCardTemplate(this._movie);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
