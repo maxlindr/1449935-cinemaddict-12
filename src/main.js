@@ -77,15 +77,16 @@ const renderMoviesBoards = (boardContainer, moviesData) => {
   moviesIterator.next().forEach((movie) => appendMovieToContainer(allMovieCardsContainer, movie));
 
   if (!moviesIterator.isDone) {
-    const showMoreBtn = new ShowMoreButtonView().getElement();
+    const showMoreBtnView = new ShowMoreButtonView();
 
-    render(allMoviesBoard, showMoreBtn, RenderPosition.BEFOREEND);
+    render(allMoviesBoard, showMoreBtnView, RenderPosition.BEFOREEND);
 
-    showMoreBtn.addEventListener(`click`, () => {
+    showMoreBtnView.setClickHandler(() => {
       moviesIterator.next().forEach((movie) => appendMovieToContainer(allMovieCardsContainer, movie));
 
       if (moviesIterator.isDone) {
-        showMoreBtn.remove();
+        showMoreBtnView.removeClickHandler();
+        showMoreBtnView.getElement().remove();
       }
     });
   }
