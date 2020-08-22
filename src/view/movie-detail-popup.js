@@ -204,14 +204,34 @@ const createMovieDetailsPopupTemplate = (movieDto) => {
   );
 };
 
-export default class MovieDetailsPopup extends AbstractView {
+export default class MovieDetailsPopupView extends AbstractView {
   constructor(movie) {
     super();
     this._element = null;
     this._movie = movie;
+    this._callback = null;
+    this._closeBtnClickHandler = this._closeBtnClickHandler.bind(this);
+  }
+
+  _closeBtnClickHandler() {
+    this._callback();
+  }
+
+  _getCloseBtnElement() {
+    return this.getElement().querySelector(`.film-details__close-btn`);
   }
 
   getTemplate() {
     return createMovieDetailsPopupTemplate(this._movie);
+  }
+
+  setCloseHandler(callback) {
+    this._callback = callback;
+    this._getCloseBtnElement().addEventListener(`click`, this._closeBtnClickHandler);
+  }
+
+  removeCloseHandler() {
+    this._callback = null;
+    this._getCloseBtnElement().removeEventListener(`click`, this._closeBtnClickHandler);
   }
 }

@@ -49,22 +49,21 @@ const renderMoviesBoards = (boardContainer, moviesData) => {
 
       const movieDetailsPopupView = new MovieDetailsPopupView(movie);
       const movieDetailsPopupElement = movieDetailsPopupView.getElement();
-      const popupCloseBtn = movieDetailsPopupElement.querySelector(`.film-details__close-btn`);
 
-      let removePopup;
+      let disposePopup;
 
       const escapeKeyDownHandler = (escDownEvt) => {
         if (escDownEvt.key === `Escape`) {
-          removePopup();
+          disposePopup();
         }
       };
 
-      removePopup = () => {
+      disposePopup = () => {
         document.removeEventListener(`keydown`, escapeKeyDownHandler);
         body.removeChild(movieDetailsPopupElement);
       };
 
-      popupCloseBtn.addEventListener(`click`, removePopup);
+      movieDetailsPopupView.setCloseHandler(disposePopup);
       document.addEventListener(`keydown`, escapeKeyDownHandler);
 
       body.appendChild(movieDetailsPopupElement);
