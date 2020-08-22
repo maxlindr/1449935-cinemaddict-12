@@ -26,11 +26,11 @@ const userProfile = createUserProfileMock();
 const body = document.querySelector(`body`);
 
 const header = document.querySelector(`.header`);
-render(header, new ProfileView(userProfile.rating, userProfile.avatar).getElement(), RenderPosition.BEFOREEND);
+render(header, new ProfileView(userProfile.rating, userProfile.avatar), RenderPosition.BEFOREEND);
 
 const main = document.querySelector(`.main`);
-render(main, new MainMenuView(createFilters(movies)).getElement(), RenderPosition.BEFOREEND);
-render(main, new MoviesSortBarView().getElement(), RenderPosition.BEFOREEND);
+render(main, new MainMenuView(createFilters(movies)), RenderPosition.BEFOREEND);
+render(main, new MoviesSortBarView(), RenderPosition.BEFOREEND);
 const moviesContainer = new MoviesContainerView().getElement();
 render(main, moviesContainer, RenderPosition.BEFOREEND);
 
@@ -116,8 +116,8 @@ const renderMoviesBoards = (boardContainer, moviesData) => {
 if (movies.length > 0) {
   renderMoviesBoards(moviesContainer, movies);
 } else {
-  render(moviesContainer, new NoMoviesView().getElement(), RenderPosition.BEFOREEND);
+  render(moviesContainer, new NoMoviesView(), RenderPosition.BEFOREEND);
 }
 
 const statsContainer = document.querySelector(`.footer__statistics`);
-render(statsContainer, new StatsView(movies.length).getElement(), RenderPosition.BEFOREEND);
+render(statsContainer, new StatsView(movies.length), RenderPosition.BEFOREEND);
