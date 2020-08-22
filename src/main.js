@@ -42,7 +42,6 @@ const renderMoviesBoards = (boardContainer, moviesData) => {
 
   const appendMovieToContainer = (container, movie) => {
     const movieCardView = new MovieCardView(movie);
-    const movieCardElement = movieCardView.getElement();
 
     const cardElementClickHandler = (evt) => {
       evt.preventDefault();
@@ -69,11 +68,9 @@ const renderMoviesBoards = (boardContainer, moviesData) => {
       body.appendChild(movieDetailsPopupElement);
     };
 
-    movieCardElement
-      .querySelectorAll(`.film-card__poster, .film-card__title, .film-card__comments`)
-      .forEach((element) => element.addEventListener(`click`, cardElementClickHandler));
+    movieCardView.setClickHandler(cardElementClickHandler);
 
-    render(container, movieCardElement, RenderPosition.BEFOREEND);
+    render(container, movieCardView, RenderPosition.BEFOREEND);
   };
 
   const moviesIterator = new ArrayChunkIterator(moviesData, ALL_MOVIES_BOARD_CARDS_PORTION_COUNT);
