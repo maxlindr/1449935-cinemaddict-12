@@ -8,7 +8,7 @@ import MovieCardView from './view/movie-card';
 import MoviesExtraBoardView from './view/movies-extra-board';
 import StatsView from './view/stats';
 import MovieDetailsPopupView from './view/movie-detail-popup';
-// import {createMovieMock} from './mock/movie-mock';
+import {createMovieMock} from './mock/movie-mock';
 import NoMoviesView from './view/no-movies';
 import {createUserProfileMock} from './mock/user-profile-mock';
 import {createFilters} from './mock/filters-mock';
@@ -17,10 +17,10 @@ import ArrayChunkIterator from './array-chunk-iterator';
 
 const ALL_MOVIES_BOARD_CARDS_PORTION_COUNT = 5;
 const EXTRA_BOARDS_MOVIES_CARDS_COUNT = 2;
-// const MOVIES_COUNT = 20;
+const MOVIES_COUNT = 20;
 
-// const movies = Array(MOVIES_COUNT).fill().map(createMovieMock);
-const movies = [];
+const movies = Array(MOVIES_COUNT).fill().map(createMovieMock);
+// const movies = [];
 const userProfile = createUserProfileMock();
 
 const body = document.querySelector(`body`);
