@@ -4,7 +4,6 @@ import {render, RenderPosition} from '../render.js';
 export default class MoviesBoardView extends AbstractView {
   constructor() {
     super();
-    this._element = null;
   }
 
   getMoviesContainer() {

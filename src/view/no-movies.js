@@ -11,7 +11,6 @@ const createTemplate = () => {
 export default class NoMoviesView extends AbstractView {
   constructor() {
     super();
-    this._element = null;
   }
 
   getTemplate() {

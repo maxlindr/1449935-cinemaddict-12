@@ -13,7 +13,6 @@ const createMoviesSortBarTemplate = () => {
 export default class MoviesSortBarView extends AbstractView {
   constructor() {
     super();
-    this._element = null;
   }
 
   getTemplate() {

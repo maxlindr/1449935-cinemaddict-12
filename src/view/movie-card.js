@@ -34,7 +34,6 @@ const createMovieCardTemplate = (movieDto) => {
 export default class MovieCardView extends AbstractView {
   constructor(movie) {
     super();
-    this._element = null;
     this._movie = movie;
     this._callback = null;
     this._clickHandler = this._clickHandler.bind(this);

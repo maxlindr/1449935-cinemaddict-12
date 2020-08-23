@@ -17,7 +17,6 @@ const createMainMenuTemplate = (filters) => {
 export default class MainMenuView extends AbstractView {
   constructor(filters) {
     super();
-    this._element = null;
     this._filters = filters;
   }
 

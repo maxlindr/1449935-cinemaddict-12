@@ -12,7 +12,6 @@ const createMoviesExtraBoard = (title) => {
 export default class MoviesExtraBoardView extends MoviesBoardView {
   constructor(title) {
     super();
-    this._element = null;
     this._title = title;
   }
 

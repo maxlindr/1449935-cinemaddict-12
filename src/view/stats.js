@@ -7,7 +7,6 @@ const createStatsElement = (value) => {
 export default class StatsView extends AbstractView {
   constructor(value) {
     super();
-    this._element = null;
     this._value = value;
   }
 

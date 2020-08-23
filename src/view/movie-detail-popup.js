@@ -207,7 +207,6 @@ const createMovieDetailsPopupTemplate = (movieDto) => {
 export default class MovieDetailsPopupView extends AbstractView {
   constructor(movie) {
     super();
-    this._element = null;
     this._movie = movie;
     this._callback = null;
     this._closeBtnClickHandler = this._closeBtnClickHandler.bind(this);

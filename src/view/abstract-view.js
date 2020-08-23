@@ -5,6 +5,8 @@ export default class AbstractView {
     if (new.target === AbstractView) {
       throw new Error(`Can't instantiate AbstractView, only concrete one.`);
     }
+
+    this._element = null;
   }
 
   getTemplate() {
