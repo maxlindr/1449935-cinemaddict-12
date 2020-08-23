@@ -1,4 +1,4 @@
-import AbstractView from './abstract-view';
+import MoviesBoardView from './movies-board-view';
 
 const createAllMoviesBoardTemplate = () => {
   return (
@@ -9,10 +9,9 @@ const createAllMoviesBoardTemplate = () => {
   );
 };
 
-export default class AllMoviesBoardView extends AbstractView {
+export default class AllMoviesBoardView extends MoviesBoardView {
   constructor() {
     super();
-    this._element = null;
   }
 
   getTemplate() {
