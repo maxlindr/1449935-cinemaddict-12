@@ -8,6 +8,7 @@ import MovieDetailsPopupView from '../view/movie-detail-popup';
 import NoMoviesView from '../view/no-movies';
 import {render, RenderPosition} from '../render.js';
 import ArrayChunkIterator from '../array-chunk-iterator';
+import {SortType} from '../constants';
 
 const ALL_MOVIES_BOARD_CARDS_PORTION_COUNT = 5;
 const EXTRA_BOARDS_MOVIES_CARDS_COUNT = 2;
@@ -57,10 +58,15 @@ export default class MovieList {
     this._showMoreBtnView = new ShowMoreButtonView();
     this._topRatedBoard = new MoviesExtraBoardView(`Top rated`);
     this._mostCommentedBoard = new MoviesExtraBoardView(`Most commented`);
+
+    this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
+
+    this._sortType = SortType.DEFAULT;
   }
 
   init(movies) {
     this._movies = movies;
+    this._sortedMovies = movies.slice();
     render(this._container, this._moviesSortBarView, RenderPosition.BEFOREEND);
     render(this._container, this._boardsContainerView, RenderPosition.BEFOREEND);
 
@@ -68,6 +74,7 @@ export default class MovieList {
       this._renderAllMoviesBoard();
       this._renderTopRatedBoard();
       this._renderMostCommentedBoard();
+      this._moviesSortBarView.setSortTypeChangeHandler(this._sortTypeChangeHandler);
     } else {
       render(this._boardsContainerView, this._noMoviesView, RenderPosition.BEFOREEND);
     }
@@ -75,8 +82,11 @@ export default class MovieList {
 
   _renderAllMoviesBoard() {
     render(this._boardsContainerView, this._allMoviesBoardView, RenderPosition.BEFOREEND);
+    this._renderAllMovies();
+  }
 
-    this._movieChunksIterator = new ArrayChunkIterator(this._movies, ALL_MOVIES_BOARD_CARDS_PORTION_COUNT);
+  _renderAllMovies() {
+    this._movieChunksIterator = new ArrayChunkIterator(this._sortedMovies, ALL_MOVIES_BOARD_CARDS_PORTION_COUNT);
     this._movieChunksIterator.next().forEach((movie) => appendMovieToContainer(this._allMoviesBoardView, movie));
 
     if (!this._movieChunksIterator.isDone) {
@@ -115,5 +125,33 @@ export default class MovieList {
     for (let i = 0; i < Math.min(mostCommentedMovies.length, EXTRA_BOARDS_MOVIES_CARDS_COUNT); i++) {
       appendMovieToContainer(this._mostCommentedBoard, mostCommentedMovies[i]);
     }
+  }
+
+  _sortMovies(sortType) {
+    switch (sortType) {
+      case SortType.DATE:
+        this._sortedMovies.sort((a, b) => b.releaseDate.getTime() - a.releaseDate.getTime());
+        break;
+      case SortType.RATING:
+        this._sortedMovies.sort((a, b) => b.rating - a.rating);
+        break;
+      default:
+        this._sortedMovies = this._movies.slice();
+    }
+  }
+
+  _sortTypeChangeHandler(sortType) {
+    if (sortType === this._sortType) {
+      return;
+    }
+
+    this._sortType = sortType;
+    this._sortMovies(sortType);
+    this._clearList();
+    this._renderAllMovies();
+  }
+
+  _clearList() {
+    this._allMoviesBoardView.getMoviesContainer().textContent = ``;
   }
 }
