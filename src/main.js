@@ -1,5 +1,4 @@
 import MainMenuView from './view/main-menu';
-import MoviesSortBarView from './view/movies-sort-bar';
 import ProfileView from './view/profile';
 import StatsView from './view/stats';
 import {createMovieMock} from './mock/movie-mock';
@@ -19,7 +18,6 @@ render(header, new ProfileView(userProfile.rating, userProfile.avatar), RenderPo
 
 const main = document.querySelector(`.main`);
 render(main, new MainMenuView(createFilters(movies)), RenderPosition.BEFOREEND);
-render(main, new MoviesSortBarView(), RenderPosition.BEFOREEND);
 
 const movieBoard = new MovieList(main);
 movieBoard.init(movies);

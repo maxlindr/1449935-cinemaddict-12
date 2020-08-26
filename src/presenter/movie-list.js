@@ -1,3 +1,4 @@
+import MoviesSortBarView from '../view/movies-sort-bar';
 import MoviesContainerView from '../view/movies-container';
 import AllMoviesBoardView from '../view/all-movies-board';
 import ShowMoreButtonView from '../view/show-more-button';
@@ -49,6 +50,7 @@ const appendMovieToContainer = (container, movie) => {
 export default class MovieList {
   constructor(container) {
     this._container = container;
+    this._moviesSortBarView = new MoviesSortBarView();
     this._boardsContainerView = new MoviesContainerView();
     this._noMoviesView = new NoMoviesView();
     this._allMoviesBoardView = new AllMoviesBoardView();
@@ -59,7 +61,7 @@ export default class MovieList {
 
   init(movies) {
     this._movies = movies;
-
+    render(this._container, this._moviesSortBarView, RenderPosition.BEFOREEND);
     render(this._container, this._boardsContainerView, RenderPosition.BEFOREEND);
 
     if (movies.length > 0) {
