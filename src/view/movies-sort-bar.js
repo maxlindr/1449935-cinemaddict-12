@@ -11,10 +11,6 @@ const createMoviesSortBarTemplate = () => {
 };
 
 export default class MoviesSortBarView extends AbstractView {
-  constructor() {
-    super();
-  }
-
   getTemplate() {
     return createMoviesSortBarTemplate();
   }

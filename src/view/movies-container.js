@@ -5,10 +5,6 @@ const createMoviesContainerTemplate = () => {
 };
 
 export default class MoviesContainerView extends AbstractView {
-  constructor() {
-    super();
-  }
-
   getTemplate() {
     return createMoviesContainerTemplate();
   }

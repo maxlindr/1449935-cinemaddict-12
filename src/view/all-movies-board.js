@@ -10,10 +10,6 @@ const createAllMoviesBoardTemplate = () => {
 };
 
 export default class AllMoviesBoardView extends MoviesBoardView {
-  constructor() {
-    super();
-  }
-
   getTemplate() {
     return createAllMoviesBoardTemplate();
   }
