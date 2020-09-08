@@ -1,4 +1,4 @@
-import AbstractView from './abstract/abstract-view';
+import SmartView from './abstract/smart-view';
 import {formatDuration} from '../utils.js';
 
 const DESCRIPTION_TRIM_THRESHOLD_LENGTH = 140;
@@ -26,28 +26,22 @@ const createMovieCardTemplate = (movieDto) => {
   );
 };
 
-export default class MovieCardView extends AbstractView {
+export default class MovieCardView extends SmartView {
   constructor(movie) {
-    super();
-    this._data = movie;
+    super(movie);
     this._clickCallback = null;
 
     this._clickHandler = this._clickHandler.bind(this);
+    this._restoreHandlers();
   }
 
   _clickHandler(evt) {
     this._clickCallback(evt);
   }
 
-  getElement() {
-    if (this._element) {
-      return this._element;
-    }
-
-    super.getElement().querySelectorAll(`.film-card__poster, .film-card__title, .film-card__comments`)
+  _restoreHandlers() {
+    this.getElement().querySelectorAll(`.film-card__poster, .film-card__title, .film-card__comments`)
       .forEach((it) => it.addEventListener(`click`, this._clickHandler));
-
-    return this._element;
   }
 
   getTemplate() {
