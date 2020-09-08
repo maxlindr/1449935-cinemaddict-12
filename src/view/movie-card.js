@@ -22,11 +22,6 @@ const createMovieCardTemplate = (movieDto) => {
       <img src="${movieDto.poster}" alt="" class="film-card__poster">
       <p class="film-card__description">${shortDescription}</p>
       <a class="film-card__comments">${movieDto.comments.length} comments</a>
-      <form class="film-card__controls">
-        <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist">Add to watchlist</button>
-        <button class="film-card__controls-item button film-card__controls-item--mark-as-watched">Mark as watched</button>
-        <button class="film-card__controls-item button film-card__controls-item--favorite">Mark as favorite</button>
-      </form>
     </article>`
   );
 };
@@ -34,30 +29,32 @@ const createMovieCardTemplate = (movieDto) => {
 export default class MovieCardView extends AbstractView {
   constructor(movie) {
     super();
-    this._movie = movie;
-    this._callback = null;
+    this._data = movie;
+    this._clickCallback = null;
+
     this._clickHandler = this._clickHandler.bind(this);
   }
 
   _clickHandler(evt) {
-    this._callback(evt);
+    this._clickCallback(evt);
   }
 
-  _getInteractiveElements() {
-    return this.getElement().querySelectorAll(`.film-card__poster, .film-card__title, .film-card__comments`);
+  getElement() {
+    if (this._element) {
+      return this._element;
+    }
+
+    super.getElement().querySelectorAll(`.film-card__poster, .film-card__title, .film-card__comments`)
+      .forEach((it) => it.addEventListener(`click`, this._clickHandler));
+
+    return this._element;
   }
 
   getTemplate() {
-    return createMovieCardTemplate(this._movie);
+    return createMovieCardTemplate(this._data);
   }
 
   setClickHandler(callback) {
-    this._callback = callback;
-    this._getInteractiveElements().forEach((element) => element.addEventListener(`click`, this._clickHandler));
-  }
-
-  removeClickHandler() {
-    this._callback = null;
-    this._getInteractiveElements().forEach((element) => element.removeEventListener(`click`, this._clickHandler));
+    this._clickCallback = callback;
   }
 }
