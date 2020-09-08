@@ -1,10 +1,6 @@
 import SmartView from './abstract/smart-view';
 
 export default class MoviePopupCommentsCountView extends SmartView {
-  constructor(data) {
-    super(data);
-  }
-
   _restoreHandlers() {}
 
   getTemplate() {

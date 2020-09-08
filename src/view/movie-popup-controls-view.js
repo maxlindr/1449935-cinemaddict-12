@@ -1,10 +1,6 @@
 import MovieControlsView from './abstract/movie-controls-vew';
 
 export default class MoviePopupControlsView extends MovieControlsView {
-  constructor(data) {
-    super(data);
-  }
-
   _restoreHandlers() {
     const element = this.getElement();
 

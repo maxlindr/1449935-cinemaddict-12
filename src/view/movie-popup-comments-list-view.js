@@ -1,4 +1,4 @@
-import SmartsView from './abstract/smart-view';
+import SmartView from './abstract/smart-view';
 
 const EMOJIES = {
   angry: {
@@ -67,11 +67,7 @@ const mapComment = (comment) => {
   );
 };
 
-export default class MoviePopupCommentsListView extends SmartsView {
-  constructor(data) {
-    super(data);
-  }
-
+export default class MoviePopupCommentsListView extends SmartView {
   _restoreHandlers() {}
 
   getTemplate() {

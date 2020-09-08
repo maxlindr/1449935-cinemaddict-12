@@ -3,10 +3,6 @@ import MovieControlsView from './abstract/movie-controls-vew';
 const BUTTON_ACTIVE_CLASSNAME = `film-card__controls-item--active`;
 
 export default class MovieCardControlsView extends MovieControlsView {
-  constructor(data) {
-    super(data);
-  }
-
   _restoreHandlers() {
     const element = this.getElement();
 
