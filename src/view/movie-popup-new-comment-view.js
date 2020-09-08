@@ -1,4 +1,4 @@
-import SmartView from './smart-view';
+import SmartView from './abstract/smart-view';
 
 const EMOJIES = {
   angry: {

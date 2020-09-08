@@ -1,4 +1,4 @@
-import AbstractView from './abstract-view';
+import AbstractView from './abstract/abstract-view';
 import {formatDuration} from '../utils.js';
 
 const DESCRIPTION_TRIM_THRESHOLD_LENGTH = 140;

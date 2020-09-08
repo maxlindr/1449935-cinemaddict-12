@@ -1,4 +1,4 @@
-import AbstractView from './abstract-view';
+import AbstractView from './abstract/abstract-view';
 import {render, RenderPosition} from '../render.js';
 
 export default class MoviesBoardView extends AbstractView {

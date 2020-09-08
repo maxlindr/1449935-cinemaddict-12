@@ -1,4 +1,4 @@
-import SmartView from './smart-view';
+import SmartView from './abstract/smart-view';
 
 export default class MoviePopupCommentsCountView extends SmartView {
   constructor(data) {

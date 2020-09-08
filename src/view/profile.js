@@ -1,4 +1,4 @@
-import AbstractView from './abstract-view';
+import AbstractView from './abstract/abstract-view';
 
 const calcRank = (rating) => {
   if (rating === 0) {
