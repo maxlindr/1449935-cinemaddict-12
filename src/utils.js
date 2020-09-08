@@ -1,4 +1,4 @@
-const MINUTES_IN_HOUR = 60;
+import moment from 'moment';
 
 export const createElement = (template) => {
   const newElement = document.createElement(`div`);
@@ -13,8 +13,6 @@ export const createElement = (template) => {
  * @return {string} Отформатированная строка
  */
 export const formatDuration = (duration) => {
-  const hoursPart = Math.floor(duration / MINUTES_IN_HOUR);
-  const minutesPart = duration % MINUTES_IN_HOUR;
-
-  return `${hoursPart}h ${minutesPart}m`;
+  const durationObj = moment.duration(duration, `minutes`);
+  return `${durationObj.hours()}h ${durationObj.minutes()}m`;
 };

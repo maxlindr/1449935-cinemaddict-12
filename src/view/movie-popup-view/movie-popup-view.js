@@ -1,14 +1,10 @@
 import SmartView from '../abstract/smart-view';
 import {formatDuration} from '../../utils.js';
+import moment from 'moment';
 
 const joinArrayElementsToString = (arr) => arr.join(`, `);
 
-const formatMovieDate = (movieDate) => {
-  const month = movieDate.toLocaleDateString(`en-US`, {month: `long`});
-  const date = movieDate.getDate();
-  const year = movieDate.getFullYear();
-  return `${date} ${month} ${year}`;
-};
+const formatMovieDate = (movieDate) => moment(movieDate).format(`D MMMM YYYY`);
 
 const mapGenre = (genre) => `<span class="film-details__genre">${genre}</span>`;
 

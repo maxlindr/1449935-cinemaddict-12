@@ -1,4 +1,5 @@
 import SmartView from '../abstract/smart-view';
+import moment from 'moment';
 
 const EMOJIES = {
   angry: {
@@ -19,35 +20,9 @@ const EMOJIES = {
   },
 };
 
-const formatCommentDate = (commentDate) => {
-  const RELATIVE_DATE_THRESHOLD_DAYS = 30;
-  const MS_IN_DAY = 1000 * 60 * 60 * 24;
+moment.locale(`en`);
 
-  const now = new Date();
-  const nowInMs = now.getTime();
-  const year = commentDate.getFullYear();
-  const month = commentDate.getMonth() + 1;
-  const date = commentDate.getDate();
-  const hours = commentDate.getHours();
-  const minutes = commentDate.getMinutes();
-
-  const daysPassed = (nowInMs - commentDate.getTime()) / MS_IN_DAY;
-
-  if (
-    now.getFullYear() === year &&
-    now.getMonth() === commentDate.getMonth() &&
-    now.getDate() === date
-  ) {
-    return `Today`;
-  } else if (daysPassed < 1) {
-    return `Yesterday`;
-  } else if (daysPassed <= RELATIVE_DATE_THRESHOLD_DAYS) {
-    const dayOrDays = daysPassed > 1 ? `days` : `day`;
-    return `${daysPassed} ${dayOrDays} ago`;
-  }
-
-  return `${year}/${month}/${date} ${hours}:${String(minutes).padStart(2, `0`)}`;
-};
+const formatCommentDate = (commentDate) => moment(commentDate).fromNow();
 
 const mapComment = (comment) => {
   return (
