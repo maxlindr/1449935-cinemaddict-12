@@ -1,8 +1,8 @@
-import MovieDetailsPopupView from '../view/movie-detail-popup';
-import MoviePopupControlsView from '../view/movie-popup-controls-view';
-import MoviePopupNewCommentView from '../view/movie-popup-new-comment-view';
-import MoviePopupCommentsCountView from '../view/movie-popup-comments-count-view';
-import MoviePopupCommentsListView from '../view/movie-popup-comments-list-view';
+import MoviePopupView from '../view/movie-popup-view/movie-popup-view';
+import MoviePopupControlsView from '../view/movie-popup-view/movie-popup-controls-view';
+import MoviePopupNewCommentView from '../view/movie-popup-view/movie-popup-new-comment-view';
+import MoviePopupCommentsCountView from '../view/movie-popup-view/movie-popup-comments-count-view';
+import MoviePopupCommentsListView from '../view/movie-popup-view/movie-popup-comments-list-view';
 import {render, RenderPosition} from '../render.js';
 
 export default class MoviePopup {
@@ -87,7 +87,7 @@ export default class MoviePopup {
 
     document.addEventListener(`keydown`, this._escapeKeyDownHandler);
 
-    this._moviePopupVeiw = new MovieDetailsPopupView(movie);
+    this._moviePopupVeiw = new MoviePopupView(movie);
     this._moviePopupVeiw.setCloseHandler(this.close);
 
     const controlsData = {

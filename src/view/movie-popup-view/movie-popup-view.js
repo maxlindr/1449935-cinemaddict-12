@@ -1,5 +1,5 @@
-import SmartView from './abstract/smart-view';
-import {formatDuration} from '../utils.js';
+import SmartView from '../abstract/smart-view';
+import {formatDuration} from '../../utils.js';
 
 const joinArrayElementsToString = (arr) => arr.join(`, `);
 

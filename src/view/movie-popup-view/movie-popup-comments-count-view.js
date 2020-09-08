@@ -1,4 +1,4 @@
-import SmartView from './abstract/smart-view';
+import SmartView from '../abstract/smart-view';
 
 export default class MoviePopupCommentsCountView extends SmartView {
   _restoreHandlers() {}

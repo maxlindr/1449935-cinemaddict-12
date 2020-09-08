@@ -1,4 +1,4 @@
-import MovieControlsView from './abstract/movie-controls-vew';
+import MovieControlsView from '../abstract/movie-controls-vew';
 
 export default class MoviePopupControlsView extends MovieControlsView {
   _restoreHandlers() {
