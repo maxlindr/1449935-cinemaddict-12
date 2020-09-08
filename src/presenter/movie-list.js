@@ -79,14 +79,16 @@ export default class MovieList {
         this._activePopup.close();
       }
 
+      const movieData = this._movies.find((mov) => mov.id === movie.id);
       let moviePopup = this._moviePopupPresentersMap.get(movie.id);
 
       if (moviePopup) {
-        moviePopup.update(this._movies.find((mov) => mov.id === movie.id));
+        moviePopup.update(movieData);
       } else {
-        moviePopup = new MoviePopup(body, movie);
+        moviePopup = new MoviePopup(body, movieData);
         moviePopup.setChangeHandler(this._updateMovie);
         this._moviePopupPresentersMap.set(movie.id, moviePopup);
+
         moviePopup.setCloseHandler(() => {
           this._activePopup = null;
         });
