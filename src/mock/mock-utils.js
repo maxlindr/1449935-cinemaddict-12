@@ -7,4 +7,6 @@ const getRandomArrayElement = (arr) => arr[generateRandomIntegerFromRange(0, arr
 
 const generateNames = (number) => Array(number).fill().map(generateName);
 
-export {generateRandomIntegerFromRange, generateName, generateNames, getRandomArrayElement, getRandomArrayElements, ArrayCyclicIterator};
+const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
+
+export {generateRandomIntegerFromRange, generateName, generateNames, generateId, getRandomArrayElement, getRandomArrayElements, ArrayCyclicIterator};

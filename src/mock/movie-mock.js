@@ -1,4 +1,4 @@
-import {generateRandomIntegerFromRange, getRandomArrayElement, getRandomArrayElements, generateName, generateNames, ArrayCyclicIterator} from './mock-utils';
+import {generateRandomIntegerFromRange, getRandomArrayElement, getRandomArrayElements, generateName, generateNames, generateId, ArrayCyclicIterator} from './mock-utils';
 import {generateComment} from './generate-comment';
 import {generateDescription} from './generate-description';
 
@@ -97,6 +97,7 @@ export const createMovieMock = () => {
   const watched = Boolean(generateRandomIntegerFromRange(0, 1));
 
   return {
+    id: generateId(),
     title,
     originalTitle: title,
     poster: getRandomArrayElement(POSTERS),
