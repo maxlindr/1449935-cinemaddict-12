@@ -32,7 +32,6 @@ export default class MovieCardView extends SmartView {
     this._clickCallback = null;
 
     this._clickHandler = this._clickHandler.bind(this);
-    this._restoreHandlers();
   }
 
   _clickHandler(evt) {

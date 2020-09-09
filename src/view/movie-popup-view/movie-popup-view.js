@@ -99,8 +99,6 @@ export default class MovieDetailsPopupView extends SmartView {
     this._favoriteChangeHandler = this._favoriteChangeHandler.bind(this);
     this._watchedChangeHandler = this._watchedChangeHandler.bind(this);
     this._watchlistChangeHandler = this._watchlistChangeHandler.bind(this);
-
-    this._restoreHandlers();
   }
 
   _closeBtnClickHandler() {

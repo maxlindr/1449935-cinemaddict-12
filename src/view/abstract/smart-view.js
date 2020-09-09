@@ -33,6 +33,16 @@ export default class SmartView extends AbstractView {
     return false;
   }
 
+  getElement() {
+    if (this._element) {
+      return this._element;
+    }
+
+    super.getElement();
+    this._restoreHandlers();
+    return this._element;
+  }
+
   updateElement() {
     if (this._beforeRemoved) {
       this._beforeRemoved();
@@ -46,8 +56,6 @@ export default class SmartView extends AbstractView {
 
     parent.replaceChild(newElement, prevElement);
     prevElement = null;
-
-    this._restoreHandlers();
   }
 
   _restoreHandlers() {

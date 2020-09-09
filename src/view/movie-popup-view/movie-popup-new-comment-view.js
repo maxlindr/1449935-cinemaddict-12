@@ -33,8 +33,6 @@ export default class MoviePopupNewCommentView extends SmartView {
     this._addCommentHandler = this._addCommentHandler.bind(this);
     this._commentEmojiChangeHandler = this._commentEmojiChangeHandler.bind(this);
     this._commentTextChangeHandler = this._commentTextChangeHandler.bind(this);
-
-    this._restoreHandlers();
   }
 
   _addCommentHandler() {

@@ -11,8 +11,6 @@ export default class MovieControlsView extends SmartView {
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
     this._watchedClickHandler = this._watchedClickHandler.bind(this);
     this._watchlistClickHandler = this._watchlistClickHandler.bind(this);
-
-    this._restoreHandlers();
   }
 
   _favoriteClickHandler(evt) {
