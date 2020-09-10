@@ -1,4 +1,6 @@
-export const createFilters = (movies) => {
+export const createFilters = (moviesModel) => {
+  const movies = moviesModel.get();
+
   return {
     all: () => movies,
     watchlist: () => movies.filter((movie) => movie.watchlist),
