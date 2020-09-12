@@ -34,7 +34,7 @@ export default class MainMenuPresenter {
   }
 
   _update() {
-    const movies = this._moviesModel.get();
+    const movies = this._moviesModel.getAll();
 
     const filtersCounts = {};
     Object.entries(filters).forEach(([name, filter]) => {

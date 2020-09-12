@@ -40,10 +40,10 @@ const movieBoard = new MovieList(main, filtersModel, moviesModel, commentsModel)
 movieBoard.init(BoardMode.ALL);
 
 const statsContainer = document.querySelector(`.footer__statistics`);
-render(statsContainer, new StatsView(moviesModel.get().length), RenderPosition.BEFOREEND);
+render(statsContainer, new StatsView(moviesModel.getAll().length), RenderPosition.BEFOREEND);
 
 commentsModel.registerObserver((eventType, payload) => {
-  const oldMovie = moviesModel.get().find((movie) => movie.id === payload.movieId);
+  const oldMovie = moviesModel.get(payload.movieId);
   let newMovie;
 
   if (eventType === CommentsModel.EVENT_DELETE) {

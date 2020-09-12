@@ -75,7 +75,7 @@ export default class MovieList {
     render(this._container, this._moviesSortBarView, RenderPosition.BEFOREEND);
     render(this._container, this._boardsContainerView, RenderPosition.BEFOREEND);
 
-    if (this._moviesModel.get().length > 0) {
+    if (this._moviesModel.getAll().length > 0) {
       this._renderAllMoviesBoard();
       this._renderTopRatedBoard();
       this._renderMostCommentedBoard();
@@ -91,7 +91,7 @@ export default class MovieList {
         this._activePopup.close();
       }
 
-      const movieData = this._moviesModel.get().find((mov) => mov.id === movie.id);
+      const movieData = this._moviesModel.get(movie.id);
       let moviePopup = this._moviePopupPresentersMap.get(movie.id);
 
       if (moviePopup) {
@@ -139,7 +139,7 @@ export default class MovieList {
   }
 
   _viewActionHandler(movie) {
-    const oldMovie = this._moviesModel.get().find((item) => item.id === movie.id);
+    const oldMovie = this._moviesModel.get(movie.id);
 
     const updateType = (this._boardMode === BoardMode.ALL || !testMovieStatusChanged(movie, oldMovie))
       ? UpdateType.ITEM
@@ -181,7 +181,7 @@ export default class MovieList {
   }
 
   _renderTopRatedMovies() {
-    const topRatedMovies = this._moviesModel.get().sort((a, b) => b.rating - a.rating);
+    const topRatedMovies = this._moviesModel.getAll().sort((a, b) => b.rating - a.rating);
 
     for (let i = 0; i < Math.min(topRatedMovies.length, EXTRA_BOARDS_MOVIES_CARDS_COUNT); i++) {
       this._appendMovieToContainer(this._topRatedBoard, topRatedMovies[i]);
@@ -194,7 +194,7 @@ export default class MovieList {
   }
 
   _renderMostCommentedMovies() {
-    const mostCommentedMovies = this._moviesModel.get().sort((a, b) => b.comments.length - a.comments.length);
+    const mostCommentedMovies = this._moviesModel.getAll().sort((a, b) => b.comments.length - a.comments.length);
 
     for (let i = 0; i < Math.min(mostCommentedMovies.length, EXTRA_BOARDS_MOVIES_CARDS_COUNT); i++) {
       this._appendMovieToContainer(this._mostCommentedBoard, mostCommentedMovies[i]);
@@ -203,7 +203,7 @@ export default class MovieList {
 
   _getFilteredMovies() {
     const filter = this._filtersModel.get();
-    return filter(this._moviesModel.get());
+    return filter(this._moviesModel.getAll());
   }
 
   _getGeneralBoardMovies() {

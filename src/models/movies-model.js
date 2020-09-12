@@ -6,7 +6,11 @@ export default class MoviesModel extends Observable {
     this._movies = movies.slice();
   }
 
-  get() {
+  get(id) {
+    return this._movies.find((movie) => movie.id === id);
+  }
+
+  getAll() {
     return this._movies.slice();
   }
 
