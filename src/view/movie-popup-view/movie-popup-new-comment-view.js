@@ -1,4 +1,5 @@
 import SmartView from '../abstract/smart-view';
+import he from "he";
 
 const EMOJIES = {
   angry: {
@@ -80,7 +81,7 @@ export default class MoviePopupNewCommentView extends SmartView {
         <div for="add-emoji" class="film-details__add-emoji-label">${this._data.emoji ? mapEmojiToPreviewElementString(this._data.emoji) : `` }</div>
 
         <label class="film-details__comment-label">
-          <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${this._data.message || ``}</textarea>
+          <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${this._data.message ? he.encode(this._data.message) : ``}</textarea>
         </label>
 
         <div class="film-details__emoji-list">

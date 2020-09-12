@@ -10,6 +10,7 @@
     "start": "webpack-dev-server --open 'firefox developer edition'"
   },
   "dependencies": {
+    "he": "1.2.0",
     "moment": "2.27.0"
   },
   "devDependencies": {
