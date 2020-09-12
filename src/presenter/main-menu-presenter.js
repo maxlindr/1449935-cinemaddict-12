@@ -1,4 +1,4 @@
-import MainMenuView from '../view/main-menu';
+import MainMenuView from '../view/main-menu-view';
 import {BoardMode} from '../constants';
 import {filters} from '../filters';
 import {render, RenderPosition} from '../render.js';

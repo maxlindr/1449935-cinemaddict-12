@@ -1,6 +1,6 @@
 import MainMenuPresenter from './presenter/main-menu-presenter';
 import ProfileView from './view/profile';
-import StatsView from './view/stats';
+import StatsView from './view/stats-view';
 import {createMovieMock} from './mock/movie-mock';
 import MovieList from './presenter/movie-list';
 import {createUserProfileMock} from './mock/user-profile-mock';

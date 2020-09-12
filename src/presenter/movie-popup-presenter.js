@@ -5,7 +5,7 @@ import MoviePopupCommentsCountView from '../view/movie-popup-view/movie-popup-co
 import MoviePopupCommentsListView from '../view/movie-popup-view/movie-popup-comments-list-view';
 import {render, RenderPosition} from '../render.js';
 
-export default class MoviePopup {
+export default class MoviePopupPresenter {
   constructor(container, movie) {
     this._container = container;
 

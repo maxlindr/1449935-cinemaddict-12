@@ -1,4 +1,4 @@
-import MovieCardView from '../view/movie-card-view/movie-card';
+import MovieCardView from '../view/movie-card-view/movie-card-view';
 import MovieCardControlsView from '../view/movie-card-view/movie-card-controls-view';
 import {render, RenderPosition} from '../render.js';
 import MovieCardCommentsView from '../view/movie-card-view/movie-card-comments-view';

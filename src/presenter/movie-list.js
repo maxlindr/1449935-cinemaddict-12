@@ -1,9 +1,9 @@
-import MoviesSortBarView from '../view/movies-sort-bar';
+import MoviesSortBarView from '../view/movies-sort-bar-view';
 import MoviesContainerView from '../view/movies-container';
 import AllMoviesBoardView from '../view/all-movies-board';
 import ShowMoreButtonView from '../view/show-more-button';
 import MoviesExtraBoardView from '../view/movies-extra-board';
-import MoviePopup from './movie-popup';
+import MoviePopupPresenter from './movie-popup-presenter';
 import MovieCardPresenter from './movie-card-presenter';
 import NoMoviesView from '../view/no-movies';
 import {render, RenderPosition} from '../render.js';
@@ -96,7 +96,7 @@ export default class MovieList {
       if (moviePopup) {
         moviePopup.update(movieData);
       } else {
-        moviePopup = new MoviePopup(body, movieData);
+        moviePopup = new MoviePopupPresenter(body, movieData);
         moviePopup.setChangeHandler(this._viewActionHandler);
         this._moviePopupPresentersMap.set(movie.id, moviePopup);
 
