@@ -14,14 +14,17 @@ export default class MovieControlsView extends SmartView {
   }
 
   _favoriteClickHandler(evt) {
+    evt.preventDefault();
     this._favoriteClickCallback(evt);
   }
 
   _watchedClickHandler(evt) {
+    evt.preventDefault();
     this._watchedClickCallback(evt);
   }
 
   _watchlistClickHandler(evt) {
+    evt.preventDefault();
     this._watchlistClickCallback(evt);
   }
 

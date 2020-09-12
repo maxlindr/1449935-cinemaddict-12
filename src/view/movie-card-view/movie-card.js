@@ -1,5 +1,5 @@
-import SmartView from './abstract/smart-view';
-import {formatDuration} from '../utils.js';
+import SmartView from '../abstract/smart-view';
+import {formatDuration} from '../../utils.js';
 
 const DESCRIPTION_TRIM_THRESHOLD_LENGTH = 140;
 
@@ -21,7 +21,6 @@ const createMovieCardTemplate = (movieDto) => {
       </p>
       <img src="${movieDto.poster}" alt="" class="film-card__poster">
       <p class="film-card__description">${shortDescription}</p>
-      <a class="film-card__comments">${movieDto.comments.length} comments</a>
     </article>`
   );
 };
@@ -39,7 +38,7 @@ export default class MovieCardView extends SmartView {
   }
 
   _restoreHandlers() {
-    this.getElement().querySelectorAll(`.film-card__poster, .film-card__title, .film-card__comments`)
+    this.getElement().querySelectorAll(`.film-card__poster, .film-card__title`)
       .forEach((it) => it.addEventListener(`click`, this._clickHandler));
   }
 

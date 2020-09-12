@@ -1,13 +1,13 @@
-import MainMenuView from './view/main-menu';
+import MainMenuPresenter from './presenter/main-menu-presenter';
 import ProfileView from './view/profile';
 import StatsView from './view/stats';
 import {createMovieMock} from './mock/movie-mock';
 import MovieList from './presenter/movie-list';
 import {createUserProfileMock} from './mock/user-profile-mock';
-import {createFilters} from './mock/filters-mock';
 import {render, RenderPosition} from './render.js';
 import MoviesModel from './models/movies-model';
 import {BoardMode} from './constants';
+import FiltersModel from './models/filters-model';
 
 const MOVIES_COUNT = 20;
 
@@ -20,10 +20,13 @@ const header = document.querySelector(`.header`);
 render(header, new ProfileView(userProfile.rating, userProfile.avatar), RenderPosition.BEFOREEND);
 
 const main = document.querySelector(`.main`);
-render(main, new MainMenuView(createFilters(moviesModel)), RenderPosition.BEFOREEND);
 
-const movieBoard = new MovieList(main, moviesModel);
+const filtersModel = new FiltersModel();
+const mainMenuPresenter = new MainMenuPresenter(main, filtersModel, moviesModel);
+mainMenuPresenter.setStatsClickHandler(() => {});
+
+const movieBoard = new MovieList(main, filtersModel, moviesModel);
 movieBoard.init(BoardMode.ALL);
 
 const statsContainer = document.querySelector(`.footer__statistics`);
-render(statsContainer, new StatsView(moviesModel.length), RenderPosition.BEFOREEND);
+render(statsContainer, new StatsView(moviesModel.get().length), RenderPosition.BEFOREEND);

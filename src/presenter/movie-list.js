@@ -31,8 +31,9 @@ const testMovieStatusChanged = (movie1, movie2) => {
 };
 
 export default class MovieList {
-  constructor(container, moviesModel) {
+  constructor(container, filtersModel, moviesModel) {
     this._container = container;
+    this._filtersModel = filtersModel;
     this._moviesModel = moviesModel;
 
     this._activePopup = null;
@@ -59,6 +60,12 @@ export default class MovieList {
     this._boardMode = BoardMode.ALL;
 
     this._moviesModel.registerObserver(this._modelEventHandler);
+
+    this._filtersModel.registerObserver((event, data) => {
+      this._boardMode = data;
+      this._clearAllMoviesBoard();
+      this._renderAllMovies();
+    });
   }
 
   init(boardMode) {
@@ -78,9 +85,7 @@ export default class MovieList {
   }
 
   _appendMovieToContainer(container, movie) {
-    const cardElementClickHandler = (evt) => {
-      evt.preventDefault();
-
+    const cardElementClickHandler = () => {
       if (this._activePopup) {
         this._activePopup.close();
       }
@@ -123,6 +128,8 @@ export default class MovieList {
   _modelEventHandler(updateType, data) {
     if (updateType === UpdateType.ITEM) {
       this._updateMovie(data);
+      this._clearMostCommentedBoard();
+      this._renderMostCommentedMovies();
     } else {
       this._updateMovie(data);
       this._clearAllMoviesBoard();
@@ -146,7 +153,7 @@ export default class MovieList {
   }
 
   _renderAllMovies() {
-    this._movieChunksIterator = new ArrayChunkIterator(this._getSortedMovies(), ALL_MOVIES_BOARD_CARDS_PORTION_COUNT);
+    this._movieChunksIterator = new ArrayChunkIterator(this._getGeneralBoardMovies(), ALL_MOVIES_BOARD_CARDS_PORTION_COUNT);
     this._movieChunksIterator.next().forEach((movie) => this._appendMovieToContainer(this._allMoviesBoardView, movie));
 
     if (!this._movieChunksIterator.isDone) {
@@ -193,14 +200,19 @@ export default class MovieList {
     }
   }
 
-  _getSortedMovies() {
+  _getFilteredMovies() {
+    const filter = this._filtersModel.get();
+    return filter(this._moviesModel.get());
+  }
+
+  _getGeneralBoardMovies() {
     switch (this._sortType) {
       case SortType.DATE:
-        return this._moviesModel.get().sort((a, b) => b.releaseDate.getTime() - a.releaseDate.getTime());
+        return this._getFilteredMovies().sort((a, b) => b.releaseDate.getTime() - a.releaseDate.getTime());
       case SortType.RATING:
-        return this._moviesModel.get().sort((a, b) => b.rating - a.rating);
+        return this._getFilteredMovies().sort((a, b) => b.rating - a.rating);
       default:
-        return this._moviesModel.get();
+        return this._getFilteredMovies();
     }
   }
 
@@ -217,6 +229,7 @@ export default class MovieList {
   _clearAllMoviesBoard() {
     this._allMoviesBoardView.getMoviesContainer().textContent = ``;
     this._generalMoviePresentersMap.clear();
+    this._showMoreBtnView.destroy();
   }
 
   _clearMostCommentedBoard() {
