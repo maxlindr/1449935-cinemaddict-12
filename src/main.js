@@ -6,12 +6,23 @@ import MovieList from './presenter/movie-list';
 import {createUserProfileMock} from './mock/user-profile-mock';
 import {render, RenderPosition} from './render.js';
 import MoviesModel from './models/movies-model';
+import CommentsModel from './models/comments-model';
 import {BoardMode} from './constants';
 import FiltersModel from './models/filters-model';
+import {UpdateType} from './constants';
 
 const MOVIES_COUNT = 20;
 
-const movies = Array(MOVIES_COUNT).fill().map(createMovieMock);
+let movies = Array(MOVIES_COUNT).fill().map(createMovieMock);
+const comments = movies.reduce((acc, current) => acc.concat(current.comments), []);
+
+movies = movies.map((movie) => {
+  return Object.assign({}, movie, {comments: movie.comments.map((comment) => comment.id)});
+});
+
+const commentsModel = new CommentsModel(comments);
+
+
 // const movies = [];
 const moviesModel = new MoviesModel(movies);
 const userProfile = createUserProfileMock();
@@ -25,8 +36,22 @@ const filtersModel = new FiltersModel();
 const mainMenuPresenter = new MainMenuPresenter(main, filtersModel, moviesModel);
 mainMenuPresenter.setStatsClickHandler(() => {});
 
-const movieBoard = new MovieList(main, filtersModel, moviesModel);
+const movieBoard = new MovieList(main, filtersModel, moviesModel, commentsModel);
 movieBoard.init(BoardMode.ALL);
 
 const statsContainer = document.querySelector(`.footer__statistics`);
 render(statsContainer, new StatsView(moviesModel.get().length), RenderPosition.BEFOREEND);
+
+commentsModel.registerObserver((eventType, payload) => {
+  const oldMovie = moviesModel.get().find((movie) => movie.id === payload.movieId);
+  let newMovie;
+
+  if (eventType === CommentsModel.EVENT_DELETE) {
+    newMovie = Object.assign({}, oldMovie, {comments: oldMovie.comments.filter((id) => id !== payload.commentId)});
+    moviesModel.updateMovie(newMovie, UpdateType.ITEM);
+  } else {
+    newMovie = Object.assign({}, oldMovie, {comments: [...oldMovie.comments, payload.comment.id]});
+  }
+
+  moviesModel.updateMovie(newMovie, UpdateType.ITEM);
+});

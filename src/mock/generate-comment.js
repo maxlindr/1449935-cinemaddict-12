@@ -1,4 +1,4 @@
-import {generateRandomIntegerFromRange, getRandomArrayElement, generateName} from './mock-utils';
+import {generateRandomIntegerFromRange, getRandomArrayElement, generateName, generateId} from './mock-utils';
 
 const EMOJIES = [
   `angry`,
@@ -20,6 +20,7 @@ export const generateComment = (earliestDate) => {
   const commentDateMillis = generateRandomIntegerFromRange(earliestDateMillis, latestDateMillis);
 
   return {
+    id: generateId(),
     emoji: getRandomArrayElement(EMOJIES),
     message: getRandomArrayElement(MESSAGES),
     author: generateName(),

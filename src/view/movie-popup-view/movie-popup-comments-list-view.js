@@ -35,7 +35,7 @@ const mapComment = (comment) => {
         <p class="film-details__comment-info">
           <span class="film-details__comment-author">${comment.author}</span>
           <span class="film-details__comment-day">${formatCommentDate(comment.date)}</span>
-          <button class="film-details__comment-delete">Delete</button>
+          <button class="film-details__comment-delete" data-id="${comment.id}">Delete</button>
         </p>
       </div>
     </li>`
@@ -43,7 +43,23 @@ const mapComment = (comment) => {
 };
 
 export default class MoviePopupCommentsListView extends SmartView {
-  _restoreHandlers() {}
+  constructor(data, deleteCallback = () => {}) {
+    super(data);
+
+    this._deleteClickCallback = deleteCallback;
+
+    this._deleteClickHandler = this._deleteClickHandler.bind(this);
+  }
+
+  _deleteClickHandler(evt) {
+    evt.preventDefault();
+    this._deleteClickCallback(Number(evt.target.dataset.id));
+  }
+
+  _restoreHandlers() {
+    this.getElement().querySelectorAll(`.film-details__comment-delete`)
+      .forEach((element) => element.addEventListener(`click`, this._deleteClickHandler));
+  }
 
   getTemplate() {
     return (

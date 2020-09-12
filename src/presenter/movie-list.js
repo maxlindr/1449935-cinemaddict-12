@@ -31,10 +31,11 @@ const testMovieStatusChanged = (movie1, movie2) => {
 };
 
 export default class MovieList {
-  constructor(container, filtersModel, moviesModel) {
+  constructor(container, filtersModel, moviesModel, commentsModel) {
     this._container = container;
     this._filtersModel = filtersModel;
     this._moviesModel = moviesModel;
+    this._commentsModel = commentsModel;
 
     this._activePopup = null;
 
@@ -96,7 +97,7 @@ export default class MovieList {
       if (moviePopup) {
         moviePopup.update(movieData);
       } else {
-        moviePopup = new MoviePopupPresenter(body, movieData);
+        moviePopup = new MoviePopupPresenter(body, movieData, this._commentsModel);
         moviePopup.setChangeHandler(this._viewActionHandler);
         this._moviePopupPresentersMap.set(movie.id, moviePopup);
 

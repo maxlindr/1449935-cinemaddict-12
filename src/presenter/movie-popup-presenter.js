@@ -6,11 +6,14 @@ import MoviePopupCommentsListView from '../view/movie-popup-view/movie-popup-com
 import {render, RenderPosition} from '../render.js';
 
 export default class MoviePopupPresenter {
-  constructor(container, movie) {
+  constructor(container, movie, commentsModel) {
     this._container = container;
+    this._commentsModel = commentsModel;
+    this._movie = movie;
 
     this._escapeKeyDownHandler = this._escapeKeyDownHandler.bind(this);
     this._commentAddHandler = this._commentAddHandler.bind(this);
+    this._deleteCommentHandler = this._deleteCommentHandler.bind(this);
     this._watchedChangeHandler = this._watchedChangeHandler.bind(this);
     this._watchlistChangeHandler = this._watchlistChangeHandler.bind(this);
     this._favoriteChangeHandler = this._favoriteChangeHandler.bind(this);
@@ -36,7 +39,11 @@ export default class MoviePopupPresenter {
       date: new Date()
     };
 
-    this._changeCallback(Object.assign({}, this._movie, {comments: this._movie.comments.concat(newComment)}));
+    this._commentsModel.add(newComment, this._movie.id);
+  }
+
+  _deleteCommentHandler(commentId) {
+    this._commentsModel.delete(commentId, this._movie.id);
   }
 
   _favoriteChangeHandler() {
@@ -78,10 +85,12 @@ export default class MoviePopupPresenter {
   update(movie) {
     this._movie = movie;
 
+    const comments = movie.comments.map((commentId) => this._commentsModel.get(commentId));
+
     if (this._moviePopupVeiw) {
       this._controlsView.updateData(movie);
-      this._commentsCountView.updateData({count: movie.comments.length});
-      this._moviePopupCommentsListView.updateData({comments: movie.comments});
+      this._commentsCountView.updateData({count: comments.length});
+      this._moviePopupCommentsListView.updateData({comments});
       return;
     }
 
@@ -109,7 +118,7 @@ export default class MoviePopupPresenter {
     this._commentsCountView = new MoviePopupCommentsCountView({count: movie.comments.length});
     render(commentsContainer, this._commentsCountView, RenderPosition.AFTERBEGIN);
 
-    this._moviePopupCommentsListView = new MoviePopupCommentsListView({comments: movie.comments});
+    this._moviePopupCommentsListView = new MoviePopupCommentsListView({comments}, this._deleteCommentHandler);
     render(commentsContainer, this._moviePopupCommentsListView, RenderPosition.BEFOREEND);
 
     this._newCommentView = new MoviePopupNewCommentView();
