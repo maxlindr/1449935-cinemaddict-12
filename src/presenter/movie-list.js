@@ -221,6 +221,7 @@ export default class MovieList {
       return;
     }
 
+    this._moviesSortBarView.updateData({sortType});
     this._sortType = sortType;
     this._clearAllMoviesBoard();
     this._renderAllMovies();

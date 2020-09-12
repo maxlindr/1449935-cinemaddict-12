@@ -1,25 +1,27 @@
-import AbstractView from './abstract/abstract-view';
+import SmartView from './abstract/smart-view';
 import {SortType} from '../constants';
 
-const createMoviesSortBarTemplate = () => {
-  return (
-    `<ul class="sort">
-      <li><a href="#" class="sort__button sort__button--active" data-sort-type="${SortType.DEFAULT}">Sort by default</a></li>
-      <li><a href="#" class="sort__button" data-sort-type="${SortType.DATE}">Sort by date</a></li>
-      <li><a href="#" class="sort__button" data-sort-type="${SortType.RATING}">Sort by rating</a></li>
-    </ul>`
-  );
-};
+const ACTIVE_CLASSNAME = `sort__button--active`;
 
-export default class MoviesSortBarView extends AbstractView {
-  constructor() {
-    super();
+export default class MoviesSortBarView extends SmartView {
+  constructor(data = {sortType: SortType.DEFAULT}) {
+    super(data);
 
     this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
   }
 
   getTemplate() {
-    return createMoviesSortBarTemplate();
+    return (
+      `<ul class="sort">
+        <li><a href="#" class="sort__button ${this._data.sortType === SortType.DEFAULT ? ACTIVE_CLASSNAME : ``}" data-sort-type="${SortType.DEFAULT}">Sort by default</a></li>
+        <li><a href="#" class="sort__button ${this._data.sortType === SortType.DATE ? ACTIVE_CLASSNAME : ``}" data-sort-type="${SortType.DATE}">Sort by date</a></li>
+        <li><a href="#" class="sort__button ${this._data.sortType === SortType.RATING ? ACTIVE_CLASSNAME : ``}" data-sort-type="${SortType.RATING}">Sort by rating</a></li>
+      </ul>`
+    );
+  }
+
+  _restoreHandlers() {
+    this.getElement().addEventListener(`click`, this._sortTypeChangeHandler);
   }
 
   _sortTypeChangeHandler(evt) {
@@ -33,6 +35,5 @@ export default class MoviesSortBarView extends AbstractView {
 
   setSortTypeChangeHandler(callback) {
     this._sortTypeChangeCallback = callback;
-    this.getElement().addEventListener(`click`, this._sortTypeChangeHandler);
   }
 }
