@@ -22,10 +22,6 @@ export default class MovieCardCommentsView extends SmartView {
     this._clickCallback = callback;
   }
 
-  _restoreHandlers() {
-    this.getElement().addEventListener(`click`, this._clickHandler);
-  }
-
   getTemplate() {
     return (
       `<a class="film-card__comments">${this._data.commentsCount} comments</a>`
