@@ -1,5 +1,6 @@
 import SmartView from '../abstract/smart-view';
 import moment from 'moment';
+import he from "he";
 
 const EMOJIES = {
   angry: {
@@ -31,7 +32,7 @@ const mapComment = (comment) => {
         <img src="${EMOJIES[comment.emoji].url}" alt="${EMOJIES[comment.emoji].alt}" width="55" height="55">
       </span>
       <div>
-        <p class="film-details__comment-text">${comment.message}</p>
+        <p class="film-details__comment-text">${he.encode(comment.message)}</p>
         <p class="film-details__comment-info">
           <span class="film-details__comment-author">${comment.author}</span>
           <span class="film-details__comment-day">${formatCommentDate(comment.date)}</span>
