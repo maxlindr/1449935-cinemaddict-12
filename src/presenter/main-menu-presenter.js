@@ -13,6 +13,7 @@ export default class MainMenuPresenter {
     this._mode = BoardMode.ALL;
 
     this._statsClickCallback = () => {};
+    this._filterClickCallback = () => {};
 
     this._modeChangeHandler = this._modeChangeHandler.bind(this);
     this._statsClickHandler = this._statsClickHandler.bind(this);
@@ -20,7 +21,12 @@ export default class MainMenuPresenter {
     this._update = this._update.bind(this);
 
     moviesModel.registerObserver(this._update);
-    filtersModel.registerObserver(this._update);
+
+    filtersModel.registerObserver(() => {
+      this._update();
+      this._filterClickCallback();
+    });
+
     this._update();
   }
 
@@ -58,7 +64,19 @@ export default class MainMenuPresenter {
     render(this._container, this._view, RenderPosition.BEFOREEND);
   }
 
+  removeStatsClickHandler() {
+    this._statsClickCallback = () => {};
+  }
+
+  removeFilterClickHandler() {
+    this._filterClickCallback = () => {};
+  }
+
   setStatsClickHandler(callback) {
     this._statsClickCallback = callback;
+  }
+
+  setFilterClickHandler(callback) {
+    this._filterClickCallback = callback;
   }
 }

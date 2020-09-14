@@ -1,5 +1,6 @@
 import MainMenuPresenter from './presenter/main-menu-presenter';
 import ProfileView from './view/profile';
+import StatisticsPresenter from './presenter/statistics-presenter';
 import StatsView from './view/stats-view';
 import {createMovieMock} from './mock/movie-mock';
 import MovieList from './presenter/movie-list';
@@ -22,7 +23,6 @@ movies = movies.map((movie) => {
 
 const commentsModel = new CommentsModel(comments);
 
-
 // const movies = [];
 const moviesModel = new MoviesModel(movies);
 const userProfile = createUserProfileMock();
@@ -34,10 +34,28 @@ const main = document.querySelector(`.main`);
 
 const filtersModel = new FiltersModel();
 const mainMenuPresenter = new MainMenuPresenter(main, filtersModel, moviesModel);
-mainMenuPresenter.setStatsClickHandler(() => {});
-
+const statisticsPresenter = new StatisticsPresenter(main, moviesModel);
 const movieBoard = new MovieList(main, filtersModel, moviesModel, commentsModel);
+
+let statisticsClickHandler;
+let filterClickHandler;
+
+statisticsClickHandler = () => {
+  movieBoard.hide();
+  statisticsPresenter.init(userProfile, moviesModel);
+  mainMenuPresenter.setFilterClickHandler(filterClickHandler);
+  mainMenuPresenter.removeStatsClickHandler();
+};
+
+filterClickHandler = (filter) => {
+  statisticsPresenter.destroy();
+  movieBoard.init(filter);
+  mainMenuPresenter.setStatsClickHandler(statisticsClickHandler);
+  mainMenuPresenter.removeFilterClickHandler();
+};
+
 movieBoard.init(BoardMode.ALL);
+mainMenuPresenter.setStatsClickHandler(statisticsClickHandler);
 
 const statsContainer = document.querySelector(`.footer__statistics`);
 render(statsContainer, new StatsView(moviesModel.getAll().length), RenderPosition.BEFOREEND);

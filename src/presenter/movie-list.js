@@ -52,6 +52,7 @@ export default class MovieList {
     this._topRatedBoard = new MoviesExtraBoardView(`Top rated`);
     this._mostCommentedBoard = new MoviesExtraBoardView(`Most commented`);
 
+    this._filterChangeHandler = this._filterChangeHandler.bind(this);
     this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
     this._modelEventHandler = this._modelEventHandler.bind(this);
     this._viewActionHandler = this._viewActionHandler.bind(this);
@@ -60,29 +61,17 @@ export default class MovieList {
     this._sortType = SortType.DEFAULT;
     this._boardMode = BoardMode.ALL;
 
-    this._moviesModel.registerObserver(this._modelEventHandler);
-
-    this._filtersModel.registerObserver((event, data) => {
-      this._boardMode = data;
-      this._clearAllMoviesBoard();
-      this._renderAllMovies();
-    });
+    this._moviesSortBarView.setSortTypeChangeHandler(this._sortTypeChangeHandler);
   }
 
   init(boardMode) {
     this._boardMode = boardMode;
+    this._sortType = SortType.DEFAULT;
 
-    render(this._container, this._moviesSortBarView, RenderPosition.BEFOREEND);
-    render(this._container, this._boardsContainerView, RenderPosition.BEFOREEND);
+    this._moviesModel.registerObserver(this._modelEventHandler);
+    this._filtersModel.registerObserver(this._filterChangeHandler);
 
-    if (this._moviesModel.getAll().length > 0) {
-      this._renderAllMoviesBoard();
-      this._renderTopRatedBoard();
-      this._renderMostCommentedBoard();
-      this._moviesSortBarView.setSortTypeChangeHandler(this._sortTypeChangeHandler);
-    } else {
-      render(this._boardsContainerView, this._noMoviesView, RenderPosition.BEFOREEND);
-    }
+    this._renderBoard();
   }
 
   _appendMovieToContainer(container, movie) {
@@ -126,6 +115,19 @@ export default class MovieList {
     }
   }
 
+  _filterChangeHandler(event, boardMode) {
+    if (this._boardMode === boardMode) {
+      return;
+    }
+
+    this._moviesSortBarView.updateData({sortType: SortType.DEFAULT});
+    this._sortType = SortType.DEFAULT;
+
+    this._boardMode = boardMode;
+    this._clearAllMoviesBoard();
+    this._renderAllMovies();
+  }
+
   _modelEventHandler(updateType, data) {
     if (updateType === UpdateType.ITEM) {
       this._updateMovie(data);
@@ -159,6 +161,21 @@ export default class MovieList {
 
     if (!this._movieChunksIterator.isDone) {
       this._renderShowMoreBtnView();
+    }
+  }
+
+  _renderBoard() {
+    render(this._container, this._moviesSortBarView, RenderPosition.BEFOREEND);
+    render(this._container, this._boardsContainerView, RenderPosition.BEFOREEND);
+
+    this._moviesSortBarView.updateData({sortType: this._sortType});
+
+    if (this._moviesModel.getAll().length > 0) {
+      this._renderAllMoviesBoard();
+      this._renderTopRatedBoard();
+      this._renderMostCommentedBoard();
+    } else {
+      render(this._boardsContainerView, this._noMoviesView, RenderPosition.BEFOREEND);
     }
   }
 
@@ -286,5 +303,17 @@ export default class MovieList {
 
     this._clearAllMoviesBoard();
     this._renderAllMovies();
+  }
+
+  hide() {
+    this._filtersModel.unregisterObserver(this._filterChangeHandler);
+    this._moviesModel.unregisterObserver(this._modelEventHandler);
+
+    this._boardsContainerView.destroy();
+    this._moviesSortBarView.destroy();
+
+    this._allMoviesBoardView.destroy();
+    this._topRatedBoard.destroy();
+    this._mostCommentedBoard.destroy();
   }
 }
