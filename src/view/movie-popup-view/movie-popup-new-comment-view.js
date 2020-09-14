@@ -1,4 +1,8 @@
 import SmartView from '../abstract/smart-view';
+import {animateEmoji} from './emoji-animation';
+
+const SHAKE_ANIMATION_TIMEOUT = 600;
+const SHAKE_ANIMATION_TIMEOUT_IN_SEC = SHAKE_ANIMATION_TIMEOUT / 1000;
 
 const EMOJIES = {
   angry: {
@@ -41,10 +45,6 @@ export default class MoviePopupNewCommentView extends SmartView {
     this.updateElement();
   }
 
-  _beforeRemoved() {
-    this.dispose();
-  }
-
   dispose() {
     document.removeEventListener(`keydown`, this._keyDownHandler);
   }
@@ -59,8 +59,24 @@ export default class MoviePopupNewCommentView extends SmartView {
 
   // обработчик на нажатие Ctrl/Command + Enter
   _keyDownHandler(evt) {
-    if (evt.ctrlKey && evt.key === `Enter`) {
+    if (!evt.ctrlKey || evt.key !== `Enter`) {
+      return;
+    }
+
+    const commentInput = this.getElement().querySelector(`.film-details__comment-input`);
+    const isCommentInputValid = commentInput.checkValidity();
+
+    if (this._data.emoji && isCommentInputValid) {
       this._addCommentHandler();
+      return;
+    }
+
+    if (!this._data.emoji) {
+      this._runEmojiMissedAnimation();
+    }
+
+    if (!isCommentInputValid) {
+      commentInput.reportValidity();
     }
   }
 
@@ -80,7 +96,7 @@ export default class MoviePopupNewCommentView extends SmartView {
         <div for="add-emoji" class="film-details__add-emoji-label">${this._data.emoji ? mapEmojiToPreviewElementString(this._data.emoji) : `` }</div>
 
         <label class="film-details__comment-label">
-          <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${this._data.message || ``}</textarea>
+          <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment" required>${this._data.message || ``}</textarea>
         </label>
 
         <div class="film-details__emoji-list">
@@ -110,5 +126,15 @@ export default class MoviePopupNewCommentView extends SmartView {
 
   setAddCommentHandler(callback) {
     this._addCommentCallback = callback;
+  }
+
+  _runEmojiMissedAnimation() {
+    // анимация лейбла эмодзи комментария
+    const emojiLabel = this.getElement().querySelector(`.film-details__add-emoji-label`);
+    emojiLabel.style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT_IN_SEC}s`;
+    setTimeout(() => (emojiLabel.style.animation = ``), SHAKE_ANIMATION_TIMEOUT);
+
+    // анимация кнопок эмодзи
+    this.getElement().querySelectorAll(`.film-details__emoji-label`).forEach(animateEmoji);
   }
 }
