@@ -16,3 +16,15 @@ export const formatDuration = (duration) => {
   const durationObj = moment.duration(duration, `minutes`);
   return `${durationObj.hours()}h ${durationObj.minutes()}m`;
 };
+
+export const calcUserRank = (rating) => {
+  if (rating === 0) {
+    return ``;
+  } else if (rating <= 10) {
+    return `novice`;
+  } else if (rating <= 20) {
+    return `fan`;
+  }
+
+  return `movie buff`;
+};

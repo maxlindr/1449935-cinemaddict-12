@@ -5,6 +5,7 @@ import {generateDescription} from './generate-description';
 const WRITERS_MAX_COUNT = 2;
 const ACTORS_MAX_COUNT = 10;
 const COMMENTS_MAX_COUNT = 5;
+const WATCHED_DATE_INTERVAL_MS = 1000 * 60 * 60 * 24 * 365;
 
 const TITLES = [
   `Крёстный отец`,
@@ -95,6 +96,7 @@ export const createMovieMock = () => {
   const commentsCount = generateRandomIntegerFromRange(0, COMMENTS_MAX_COUNT);
   const releaseDate = generateRandomDate();
   const watched = Boolean(generateRandomIntegerFromRange(0, 1));
+  const dateNowMs = Date.now();
 
   return {
     id: generateId(),
@@ -115,5 +117,6 @@ export const createMovieMock = () => {
     watched,
     favorite: Boolean(generateRandomIntegerFromRange(0, 1)),
     watchlist: watched ? false : Boolean(generateRandomIntegerFromRange(0, 1)),
+    watchingDate: new Date(generateRandomIntegerFromRange(dateNowMs - WATCHED_DATE_INTERVAL_MS, dateNowMs))
   };
 };

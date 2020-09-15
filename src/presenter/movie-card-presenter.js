@@ -35,7 +35,9 @@ export default class MovieCardPresenter {
   }
 
   _watchedChangeHandler() {
-    this._changeCallback(Object.assign({}, this._movie, {watched: !this._movie.watched}));
+    const watched = !this._movie.watched;
+    const watchingDate = watched ? new Date() : null;
+    this._changeCallback(Object.assign({}, this._movie, {watched: !this._movie.watched}, {watchingDate}));
   }
 
   _watchlistChangeHandler() {

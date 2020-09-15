@@ -15,3 +15,11 @@ export const BoardMode = {
   WATCHLIST: `watchlist`,
   FAVORITES: `favorites`
 };
+
+export const StatsInterval = {
+  ALL_TIME: `all-time`,
+  TODAY: `today`,
+  WEEK: `week`,
+  MONTH: `month`,
+  YEAR: `year`
+};

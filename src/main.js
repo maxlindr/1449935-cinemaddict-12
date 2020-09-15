@@ -42,7 +42,7 @@ let filterClickHandler;
 
 statisticsClickHandler = () => {
   movieBoard.hide();
-  statisticsPresenter.init(userProfile, moviesModel);
+  statisticsPresenter.init({user: userProfile});
   mainMenuPresenter.setFilterClickHandler(filterClickHandler);
   mainMenuPresenter.removeStatsClickHandler();
 };
