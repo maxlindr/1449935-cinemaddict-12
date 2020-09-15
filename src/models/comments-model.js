@@ -1,11 +1,26 @@
 import Observable from '../observable';
-import {generateId} from '../mock/mock-utils';
 
 export default class CommentsModel extends Observable {
   constructor(comments = []) {
     super();
 
     this._comments = comments.slice();
+  }
+
+  static adaptToClient(dto) {
+    const {id, author, comment, date, emotion} = dto;
+
+    return {
+      id,
+      emoji: emotion,
+      message: comment,
+      author,
+      date: new Date(date)
+    };
+  }
+
+  static adaptToServer(movie) {
+    throw new Error('Not Implemented');
   }
 
   get(id) {
@@ -28,13 +43,16 @@ export default class CommentsModel extends Observable {
   }
 
   add(comment, movieId) {
-    const newComment = Object.assign({}, comment, {id: generateId()});
-    this._comments.push(newComment);
+    this._comments.push(comment);
 
     this._notify(CommentsModel.EVENT_ADD, {
       movieId,
-      comment: newComment
+      comment
     });
+  }
+
+  setAll(comments) {
+    this._comments = comments.slice();
   }
 }
 
