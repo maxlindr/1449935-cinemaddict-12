@@ -6,17 +6,15 @@ import {StatsInterval} from '../constants';
 
 const testMovieWatched = (movie) => movie.watched;
 
-const testMovieWatchedInLastDay = (movie) => moment(movie.watchingDate).isSameOrAfter(moment().subtract(1, `day`));
-const testMovieWatchedInLastWeek = (movie) => moment(movie.watchingDate).isSameOrAfter(moment().subtract(1, `week`));
-const testMovieWatchedInLastMonth = (movie) => moment(movie.watchingDate).isSameOrAfter(moment().subtract(1, `month`));
-const testMovieWatchedInLastYear = (movie) => moment(movie.watchingDate).isSameOrAfter(moment().subtract(1, `year`));
+const createFilterMovieLastWatchedInterval =
+  (interval) => (movie) => moment(movie.watchingDate).isSameOrAfter(moment().subtract(1, interval));
 
 const statsFilters = {
   [StatsInterval.ALL_TIME]: (movies) => movies.filter(testMovieWatched),
-  [StatsInterval.TODAY]: (movies) => movies.filter(testMovieWatched).filter(testMovieWatchedInLastDay),
-  [StatsInterval.WEEK]: (movies) => movies.filter(testMovieWatched).filter(testMovieWatchedInLastWeek),
-  [StatsInterval.MONTH]: (movies) => movies.filter(testMovieWatched).filter(testMovieWatchedInLastMonth),
-  [StatsInterval.YEAR]: (movies) => movies.filter(testMovieWatched).filter(testMovieWatchedInLastYear),
+  [StatsInterval.TODAY]: (movies) => movies.filter(testMovieWatched).filter(createFilterMovieLastWatchedInterval(`day`)),
+  [StatsInterval.WEEK]: (movies) => movies.filter(testMovieWatched).filter(createFilterMovieLastWatchedInterval(`week`)),
+  [StatsInterval.MONTH]: (movies) => movies.filter(testMovieWatched).filter(createFilterMovieLastWatchedInterval(`month`)),
+  [StatsInterval.YEAR]: (movies) => movies.filter(testMovieWatched).filter(createFilterMovieLastWatchedInterval(`year`)),
 };
 
 export default class StatisticsPresenter {

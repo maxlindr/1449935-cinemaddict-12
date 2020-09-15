@@ -20,9 +20,13 @@ export const formatDuration = (duration) => {
 export const calcUserRank = (rating) => {
   if (rating === 0) {
     return ``;
-  } else if (rating <= 10) {
+  }
+
+  if (rating <= 10) {
     return `novice`;
-  } else if (rating <= 20) {
+  }
+
+  if (rating <= 20) {
     return `fan`;
   }
 
