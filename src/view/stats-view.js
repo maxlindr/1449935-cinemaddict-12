@@ -1,16 +1,9 @@
-import AbstractView from './abstract/abstract-view';
+import SmartView from './abstract/smart-view';
 
-const createStatsElement = (value) => {
-  return `${value} movies inside`;
-};
-
-export default class StatsView extends AbstractView {
-  constructor(value) {
-    super();
-    this._value = value;
-  }
+export default class StatsView extends SmartView {
+  _restoreHandlers() {}
 
   getTemplate() {
-    return createStatsElement(this._value);
+    return `${this._data.moviesCount} movies inside`;
   }
 }

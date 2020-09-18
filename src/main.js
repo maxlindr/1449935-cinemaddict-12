@@ -51,7 +51,13 @@ movieBoard.init(BoardMode.ALL);
 mainMenuPresenter.setStatsClickHandler(statisticsClickHandler);
 
 const statsContainer = document.querySelector(`.footer__statistics`);
-render(statsContainer, new StatsView(moviesModel.getAll().length), RenderPosition.BEFOREEND);
+const shortStatsView = new StatsView(0);
+render(statsContainer, shortStatsView, RenderPosition.BEFOREEND);
+moviesModel.registerObserver((updateType) => {
+  if (updateType !== UpdateType.ITEM) {
+    shortStatsView.updateData({moviesCount: moviesModel.getAll().length});
+  }
+});
 
 api.getMovies()
   .then((movies) => {
