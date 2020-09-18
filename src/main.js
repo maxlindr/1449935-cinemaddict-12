@@ -1,9 +1,9 @@
 import MainMenuPresenter from './presenter/main-menu-presenter';
-import ProfileView from './view/profile';
+import UserProfileModel from './models/user-profile-model';
+import UserProfilePresenter from './presenter/user-profile-presenter';
 import StatisticsPresenter from './presenter/statistics-presenter';
 import StatsView from './view/stats-view';
 import MovieList from './presenter/movie-list';
-import {createUserProfileMock} from './mock/user-profile-mock';
 import {render, RenderPosition} from './render.js';
 import MoviesModel from './models/movies-model';
 import CommentsModel from './models/comments-model';
@@ -18,16 +18,16 @@ const END_POINT = `https://12.ecmascript.pages.academy/cinemaddict`;
 const api = new Api(END_POINT, AUTH_CREDENTIALS);
 const moviesModel = new MoviesModel();
 const commentsModel = new CommentsModel();
-const userProfile = createUserProfileMock();
+const userProfileModel = new UserProfileModel(moviesModel);
 
 const header = document.querySelector(`.header`);
-render(header, new ProfileView(userProfile.rating, userProfile.avatar), RenderPosition.BEFOREEND);
-
 const main = document.querySelector(`.main`);
+
+new UserProfilePresenter(header, userProfileModel); // eslint-disable-line no-new
 
 const filtersModel = new FiltersModel();
 const mainMenuPresenter = new MainMenuPresenter(main, filtersModel, moviesModel);
-const statisticsPresenter = new StatisticsPresenter(main, moviesModel);
+const statisticsPresenter = new StatisticsPresenter(main, moviesModel, userProfileModel);
 const movieBoard = new MovieList(main, filtersModel, moviesModel, commentsModel, api);
 
 let statisticsClickHandler;
@@ -35,7 +35,7 @@ let filterClickHandler;
 
 statisticsClickHandler = () => {
   movieBoard.destroy();
-  statisticsPresenter.init({user: userProfile});
+  statisticsPresenter.init();
   mainMenuPresenter.setFilterClickHandler(filterClickHandler);
   mainMenuPresenter.removeStatsClickHandler();
 };

@@ -18,13 +18,15 @@ const statsFilters = {
 };
 
 export default class StatisticsPresenter {
-  constructor(container, moviesModel) {
+  constructor(container, moviesModel, userProfileModel) {
     this._container = container;
     this._moviesModel = moviesModel;
+    this._userProfileModel = userProfileModel;
 
     this._statsInterval = StatsInterval.ALL_TIME;
 
     this._statsIntervalChangeHandler = this._statsIntervalChangeHandler.bind(this);
+    this._userProfileModelChangedHandler = this._userProfileModelChangedHandler.bind(this);
     this._moviesModelChanged = this._moviesModelChanged.bind(this);
 
     this._view = null;
@@ -38,9 +40,14 @@ export default class StatisticsPresenter {
     }
   }
 
-  init(data) {
+  _userProfileModelChangedHandler(updateType, payload) {
+    this._data = Object.assign({}, this._data, payload);
+    this._update();
+  }
+
+  init() {
     if (!this._view) {
-      this._data = data;
+      this._data = {user: this._userProfileModel.getProfile()};
       this._view = new StatisticsView(this._createViewData(), this._statsIntervalChangeHandler);
       this._statsInterval = StatsInterval.ALL_TIME;
       render(this._container, this._view, RenderPosition.BEFOREEND);
@@ -64,10 +71,12 @@ export default class StatisticsPresenter {
 
   _subscribeModels() {
     this._moviesModel.registerObserver(this._moviesModelChanged);
+    this._userProfileModel.registerObserver(this._userProfileModelChangedHandler);
   }
 
   _unsubscribeModels() {
     this._moviesModel.unregisterObserver(this._moviesModelChanged);
+    this._userProfileModel.unregisterObserver(this._userProfileModelChangedHandler);
   }
 
   _update() {

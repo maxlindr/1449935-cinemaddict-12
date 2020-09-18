@@ -1,5 +1,4 @@
 import SmartView from '../abstract/smart-view';
-import {calcUserRank} from '../../utils';
 import {StatsInterval} from '../../constants';
 import {drawChart} from './statistics-chart';
 
@@ -57,8 +56,8 @@ export default class StatisticsView extends SmartView {
     return (`<section class="statistic">
       <p class="statistic__rank">
         Your rank
-        <img class="statistic__img" src="${user.avatar}" alt="Avatar" width="35" height="35">
-        <span class="statistic__rank-label">${calcUserRank(user.rating)}</span>
+        <img class="statistic__img" src="${user.avatarUrl}" alt="Avatar" width="35" height="35">
+        <span class="statistic__rank-label">${user.rank}</span>
       </p>
 
       <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
