@@ -25,7 +25,7 @@ moment.locale(`en`);
 
 const formatCommentDate = (commentDate) => moment(commentDate).fromNow();
 
-const mapComment = (comment) => {
+const mapComment = (comment, disabled, deleting) => {
   return (
     `<li class="film-details__comment">
       <span class="film-details__comment-emoji">
@@ -36,7 +36,7 @@ const mapComment = (comment) => {
         <p class="film-details__comment-info">
           <span class="film-details__comment-author">${comment.author}</span>
           <span class="film-details__comment-day">${formatCommentDate(comment.date)}</span>
-          <button class="film-details__comment-delete" data-id="${comment.id}">Delete</button>
+          <button class="film-details__comment-delete" data-id="${comment.id}" ${disabled ? `disabled` : ``}>${deleting ? `Deleting...` : `Delete`}</button>
         </p>
       </div>
     </li>`
@@ -54,7 +54,7 @@ export default class MoviePopupCommentsListView extends SmartView {
 
   _deleteClickHandler(evt) {
     evt.preventDefault();
-    this._deleteClickCallback(Number(evt.target.dataset.id));
+    this._deleteClickCallback(evt.target.dataset.id);
   }
 
   _restoreHandlers() {
@@ -65,7 +65,7 @@ export default class MoviePopupCommentsListView extends SmartView {
   getTemplate() {
     return (
       `<ul class="film-details__comments-list">
-        ${this._data.comments.map(mapComment).join(`\n`)}
+        ${this._data.comments.map((comment) => mapComment(comment, this._data.disabled, comment.id === this._data.deletingId)).join(`\n`)}
       </ul>`
     );
   }

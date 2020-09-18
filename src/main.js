@@ -2,7 +2,6 @@ import MainMenuPresenter from './presenter/main-menu-presenter';
 import ProfileView from './view/profile';
 import StatisticsPresenter from './presenter/statistics-presenter';
 import StatsView from './view/stats-view';
-import {createMovieMock} from './mock/movie-mock';
 import MovieList from './presenter/movie-list';
 import {createUserProfileMock} from './mock/user-profile-mock';
 import {render, RenderPosition} from './render.js';
@@ -11,20 +10,14 @@ import CommentsModel from './models/comments-model';
 import {BoardMode} from './constants';
 import FiltersModel from './models/filters-model';
 import {UpdateType} from './constants';
+import Api from './api';
 
-const MOVIES_COUNT = 20;
+const AUTH_CREDENTIALS = `Basic lkjdfzlkdf746G6kl`;
+const END_POINT = `https://12.ecmascript.pages.academy/cinemaddict`;
 
-let movies = Array(MOVIES_COUNT).fill().map(createMovieMock);
-const comments = movies.reduce((acc, current) => acc.concat(current.comments), []);
-
-movies = movies.map((movie) => {
-  return Object.assign({}, movie, {comments: movie.comments.map((comment) => comment.id)});
-});
-
-const commentsModel = new CommentsModel(comments);
-
-// const movies = [];
-const moviesModel = new MoviesModel(movies);
+const api = new Api(END_POINT, AUTH_CREDENTIALS);
+const moviesModel = new MoviesModel();
+const commentsModel = new CommentsModel();
 const userProfile = createUserProfileMock();
 
 const header = document.querySelector(`.header`);
@@ -35,13 +28,13 @@ const main = document.querySelector(`.main`);
 const filtersModel = new FiltersModel();
 const mainMenuPresenter = new MainMenuPresenter(main, filtersModel, moviesModel);
 const statisticsPresenter = new StatisticsPresenter(main, moviesModel);
-const movieBoard = new MovieList(main, filtersModel, moviesModel, commentsModel);
+const movieBoard = new MovieList(main, filtersModel, moviesModel, commentsModel, api);
 
 let statisticsClickHandler;
 let filterClickHandler;
 
 statisticsClickHandler = () => {
-  movieBoard.hide();
+  movieBoard.destroy();
   statisticsPresenter.init({user: userProfile});
   mainMenuPresenter.setFilterClickHandler(filterClickHandler);
   mainMenuPresenter.removeStatsClickHandler();
@@ -60,15 +53,30 @@ mainMenuPresenter.setStatsClickHandler(statisticsClickHandler);
 const statsContainer = document.querySelector(`.footer__statistics`);
 render(statsContainer, new StatsView(moviesModel.getAll().length), RenderPosition.BEFOREEND);
 
+api.getMovies()
+  .then((movies) => {
+    const resolveMovieComments = (movie) => api.getComments(movie.id);
+
+    return Promise
+      .all(movies.map(resolveMovieComments))
+      .then((comments) => ({comments: comments.flat(), movies}));
+  })
+  .then(({comments, movies}) => {
+    commentsModel.setAll(comments);
+    moviesModel.set(movies, UpdateType.INIT);
+  })
+  .catch(() => moviesModel.set([], UpdateType.INIT));
+
 commentsModel.registerObserver((eventType, payload) => {
   const oldMovie = moviesModel.get(payload.movieId);
   let newMovie;
 
   if (eventType === CommentsModel.EVENT_DELETE) {
-    newMovie = Object.assign({}, oldMovie, {comments: oldMovie.comments.filter((id) => id !== payload.commentId)});
-    moviesModel.updateMovie(newMovie, UpdateType.ITEM);
+    const comments = oldMovie.comments.filter((id) => id !== payload.commentId);
+    newMovie = Object.assign({}, oldMovie, {comments});
   } else {
-    newMovie = Object.assign({}, oldMovie, {comments: [...oldMovie.comments, payload.comment.id]});
+    const comments = [...oldMovie.comments, payload.comment.id];
+    newMovie = Object.assign({}, oldMovie, {comments});
   }
 
   moviesModel.updateMovie(newMovie, UpdateType.ITEM);

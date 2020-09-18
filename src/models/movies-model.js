@@ -40,7 +40,36 @@ export default class MoviesModel extends Observable {
   }
 
   static adaptToServer(movie) {
-    throw new Error('Not Implemented');
+    const {id, comments, originalTitle, title, poster, rating, director, writers, cast, releaseDate, duration, country,
+      genres, description, ageRating, watched, favorite, watchlist, watchingDate} = movie;
+
+    return {
+      id,
+      comments,
+      film_info: {
+        title: originalTitle,
+        alternative_title: title,
+        total_rating: rating,
+        poster,
+        age_rating: ageRating,
+        director,
+        writers,
+        actors: cast,
+        release: {
+          date: releaseDate,
+          release_country: country
+        },
+        runtime: duration,
+        genre: genres,
+        description
+      },
+      user_details: {
+        watchlist,
+        already_watched: watched,
+        watching_date: watchingDate,
+        favorite
+      }
+    };
   }
 
   get(id) {
@@ -51,9 +80,9 @@ export default class MoviesModel extends Observable {
     return this._movies.slice();
   }
 
-  set(movies) {
+  set(movies, updateType) {
     this._movies = movies.slice();
-    this._notify(UpdateType.COLLECTION, this._movies.slice());
+    this._notify(updateType || UpdateType.COLLECTION, this._movies.slice());
   }
 
   updateMovie(movie, updateType) {

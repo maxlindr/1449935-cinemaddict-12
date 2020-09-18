@@ -40,9 +40,17 @@ export default class MoviePopupNewCommentView extends SmartView {
   }
 
   _addCommentHandler() {
-    this._addCommentCallback(this._data);
-    this._data = {};
-    this.updateElement();
+    this._addCommentCallback({
+      emoji: this._data.emoji,
+      message: this._data.message
+    });
+  }
+
+  reset() {
+    this.updateData({
+      emoji: ``,
+      message: ``
+    });
   }
 
   dispose() {
@@ -91,31 +99,33 @@ export default class MoviePopupNewCommentView extends SmartView {
   }
 
   getTemplate() {
+    const disabledAttribute = this._data.disabled ? `disabled` : ``;
+
     return (
       `<div class="film-details__new-comment">
         <div for="add-emoji" class="film-details__add-emoji-label">${this._data.emoji ? mapEmojiToPreviewElementString(this._data.emoji) : `` }</div>
 
         <label class="film-details__comment-label">
-          <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment" required>${this._data.message || ``}</textarea>
+          <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment" required ${disabledAttribute}>${this._data.message || ``}</textarea>
         </label>
 
         <div class="film-details__emoji-list">
-          <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile">
+          <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile" ${disabledAttribute}>
           <label class="film-details__emoji-label" for="emoji-smile">
             <img src="./images/emoji/smile.png" alt="emoji" width="30" height="30">
           </label>
 
-          <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping">
+          <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping" ${disabledAttribute}>
           <label class="film-details__emoji-label" for="emoji-sleeping">
             <img src="./images/emoji/sleeping.png" alt="emoji" width="30" height="30">
           </label>
 
-          <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke">
+          <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke" ${disabledAttribute}>
           <label class="film-details__emoji-label" for="emoji-puke">
             <img src="./images/emoji/puke.png" alt="emoji" width="30" height="30">
           </label>
 
-          <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry">
+          <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry" ${disabledAttribute}>
           <label class="film-details__emoji-label" for="emoji-angry">
             <img src="./images/emoji/angry.png" alt="emoji" width="30" height="30">
           </label>
@@ -126,6 +136,12 @@ export default class MoviePopupNewCommentView extends SmartView {
 
   setAddCommentHandler(callback) {
     this._addCommentCallback = callback;
+  }
+
+  showError() {
+    const root = this.getElement();
+    root.style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT_IN_SEC}s`;
+    setTimeout(() => (root.style.animation = ``), SHAKE_ANIMATION_TIMEOUT);
   }
 
   _runEmojiMissedAnimation() {

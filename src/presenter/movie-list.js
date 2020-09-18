@@ -6,10 +6,10 @@ import MoviesExtraBoardView from '../view/movies-extra-board';
 import MoviePopupPresenter from './movie-popup-presenter';
 import MovieCardPresenter from './movie-card-presenter';
 import NoMoviesView from '../view/no-movies';
+import LoadingView from '../view/loading-view';
 import {render, RenderPosition} from '../render.js';
 import ArrayChunkIterator from '../array-chunk-iterator';
 import {SortType, UpdateType, BoardMode} from '../constants';
-
 
 const ALL_MOVIES_BOARD_CARDS_PORTION_COUNT = 5;
 const EXTRA_BOARDS_MOVIES_CARDS_COUNT = 2;
@@ -31,11 +31,12 @@ const testMovieStatusChanged = (movie1, movie2) => {
 };
 
 export default class MovieList {
-  constructor(container, filtersModel, moviesModel, commentsModel) {
+  constructor(container, filtersModel, moviesModel, commentsModel, api) {
     this._container = container;
     this._filtersModel = filtersModel;
     this._moviesModel = moviesModel;
     this._commentsModel = commentsModel;
+    this._api = api;
 
     this._activePopup = null;
 
@@ -47,6 +48,7 @@ export default class MovieList {
     this._moviesSortBarView = new MoviesSortBarView();
     this._boardsContainerView = new MoviesContainerView();
     this._noMoviesView = new NoMoviesView();
+    this._loadingView = new LoadingView();
     this._allMoviesBoardView = new AllMoviesBoardView();
     this._showMoreBtnView = new ShowMoreButtonView();
     this._topRatedBoard = new MoviesExtraBoardView(`Top rated`);
@@ -60,6 +62,7 @@ export default class MovieList {
 
     this._sortType = SortType.DEFAULT;
     this._boardMode = BoardMode.ALL;
+    this._isLoading = true;
 
     this._moviesSortBarView.setSortTypeChangeHandler(this._sortTypeChangeHandler);
   }
@@ -68,10 +71,17 @@ export default class MovieList {
     this._boardMode = boardMode;
     this._sortType = SortType.DEFAULT;
 
+    render(this._container, this._moviesSortBarView, RenderPosition.BEFOREEND);
+    render(this._container, this._boardsContainerView, RenderPosition.BEFOREEND);
+
+    if (this._isLoading) {
+      render(this._boardsContainerView, this._loadingView, RenderPosition.BEFOREEND);
+    } else {
+      this._renderBoard();
+    }
+
     this._moviesModel.registerObserver(this._modelEventHandler);
     this._filtersModel.registerObserver(this._filterChangeHandler);
-
-    this._renderBoard();
   }
 
   _appendMovieToContainer(container, movie) {
@@ -86,7 +96,7 @@ export default class MovieList {
       if (moviePopup) {
         moviePopup.update(movieData);
       } else {
-        moviePopup = new MoviePopupPresenter(body, movieData, this._commentsModel);
+        moviePopup = new MoviePopupPresenter(body, movieData, this._commentsModel, this._api);
         moviePopup.setChangeHandler(this._viewActionHandler);
         this._moviePopupPresentersMap.set(movie.id, moviePopup);
 
@@ -98,7 +108,7 @@ export default class MovieList {
       this._activePopup = moviePopup;
     };
 
-    const movieCard = new MovieCardPresenter(container, movie);
+    const movieCard = new MovieCardPresenter(container, movie, this._api);
     movieCard.setClickHandler(cardElementClickHandler);
     movieCard.setChangeHandler(this._viewActionHandler);
 
@@ -129,14 +139,23 @@ export default class MovieList {
   }
 
   _modelEventHandler(updateType, data) {
-    if (updateType === UpdateType.ITEM) {
+    this._isLoading = false;
+
+    if (updateType === UpdateType.INIT) {
+      this._loadingView.destroy();
+      this._renderBoard();
+    } else if (updateType === UpdateType.ITEM) {
       this._updateMovie(data);
       this._clearMostCommentedBoard();
       this._renderMostCommentedMovies();
     } else {
       this._updateMovie(data);
       this._clearAllMoviesBoard();
+      this._clearMostCommentedBoard();
+      this._clearTopRatedBoard();
       this._renderAllMovies();
+      this._renderTopRatedMovies();
+      this._renderMostCommentedMovies();
     }
   }
 
@@ -164,10 +183,19 @@ export default class MovieList {
     }
   }
 
-  _renderBoard() {
-    render(this._container, this._moviesSortBarView, RenderPosition.BEFOREEND);
-    render(this._container, this._boardsContainerView, RenderPosition.BEFOREEND);
+  _resetBoard() {
+    this._filtersModel.unregisterObserver(this._filterChangeHandler);
+    this._moviesModel.unregisterObserver(this._modelEventHandler);
 
+    this._boardsContainerView.destroy();
+    this._moviesSortBarView.destroy();
+
+    this._allMoviesBoardView.destroy();
+    this._topRatedBoard.destroy();
+    this._mostCommentedBoard.destroy();
+  }
+
+  _renderBoard() {
     this._moviesSortBarView.updateData({sortType: this._sortType});
 
     if (this._moviesModel.getAll().length > 0) {
@@ -246,18 +274,18 @@ export default class MovieList {
   }
 
   _clearAllMoviesBoard() {
-    this._allMoviesBoardView.getMoviesContainer().textContent = ``;
+    Array.from(this._generalMoviePresentersMap.values()).forEach((presenter) => presenter.destroy());
     this._generalMoviePresentersMap.clear();
     this._showMoreBtnView.destroy();
   }
 
   _clearMostCommentedBoard() {
-    this._mostCommentedBoard.getMoviesContainer().textContent = ``;
+    Array.from(this._mostCommentedMoviePresentersMap.values()).forEach((presenter) => presenter.destroy());
     this._mostCommentedMoviePresentersMap.clear();
   }
 
   _clearTopRatedBoard() {
-    this._topRatedBoard.getMoviesContainer().textContent = ``;
+    Array.from(this._topRatedMoviePresentersMap.values()).forEach((presenter) => presenter.destroy());
     this._topRatedMoviePresentersMap.clear();
   }
 
@@ -305,15 +333,19 @@ export default class MovieList {
     this._renderAllMovies();
   }
 
-  hide() {
+  destroy() {
     this._filtersModel.unregisterObserver(this._filterChangeHandler);
     this._moviesModel.unregisterObserver(this._modelEventHandler);
 
-    this._boardsContainerView.destroy();
-    this._moviesSortBarView.destroy();
+    this._clearAllMoviesBoard();
+    this._clearTopRatedBoard();
+    this._clearMostCommentedBoard();
 
     this._allMoviesBoardView.destroy();
     this._topRatedBoard.destroy();
     this._mostCommentedBoard.destroy();
+
+    this._moviesSortBarView.destroy();
+    this._boardsContainerView.destroy();
   }
 }

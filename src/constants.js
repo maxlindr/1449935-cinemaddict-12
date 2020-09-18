@@ -6,7 +6,8 @@ export const SortType = {
 
 export const UpdateType = {
   ITEM: `item`,
-  COLLECTION: `collection`
+  COLLECTION: `collection`,
+  INIT: `init`,
 };
 
 export const BoardMode = {

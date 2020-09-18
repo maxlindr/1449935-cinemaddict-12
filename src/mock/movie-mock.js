@@ -112,7 +112,7 @@ export const createMovieMock = () => {
     country: getRandomArrayElement(COUNTRIES),
     genres: getRandomArrayElements(GENRES, genresCount),
     description: generateDescription(),
-    ageRating: generateRandomIntegerFromRange(0, 18) + `+`,
+    ageRating: generateRandomIntegerFromRange(0, 18),
     comments: generateComments(commentsCount, releaseDate),
     watched,
     favorite: Boolean(generateRandomIntegerFromRange(0, 1)),

@@ -22,7 +22,7 @@ const createMovieDetailsPopupTemplate = (movieDto) => {
             <div class="film-details__poster">
               <img class="film-details__poster-img" src="${movieDto.poster}" alt="">
 
-              <p class="film-details__age">${movieDto.ageRating}</p>
+              <p class="film-details__age">${movieDto.ageRating + `+`}</p>
             </div>
 
             <div class="film-details__info">
@@ -131,6 +131,10 @@ export default class MovieDetailsPopupView extends SmartView {
 
   setCloseHandler(callback) {
     this._closeCallback = callback;
+  }
+
+  removeCloseHandler() {
+    this._closeCallback = () => {};
   }
 
   setWatchedChangeHandler(callback) {

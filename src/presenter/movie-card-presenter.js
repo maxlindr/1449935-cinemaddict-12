@@ -4,8 +4,14 @@ import {render, RenderPosition} from '../render.js';
 import MovieCardCommentsView from '../view/movie-card-view/movie-card-comments-view';
 
 export default class MovieCardPresenter {
-  constructor(container, movie) {
+  constructor(container, movie, api) {
     this._container = container;
+    this._api = api;
+
+    this._state = {
+      disabled: false
+    };
+
     this._view = null;
     this._controlsView = null;
     this._commentsView = null;
@@ -16,6 +22,10 @@ export default class MovieCardPresenter {
     this._favoriteChangeHandler = this._favoriteChangeHandler.bind(this);
 
     this.update(movie);
+  }
+
+  disable(value) {
+    this._setState({disabled: value});
   }
 
   setClickHandler(callback) {
@@ -30,18 +40,36 @@ export default class MovieCardPresenter {
     this._clickCallback(evt);
   }
 
+  _setState(state) {
+    this._state = Object.assign({}, this._state, state);
+    this.update(this._movie);
+  }
+
+  _updateMovieRequest(movie) {
+    this.disable(true);
+
+    return this._api
+      .updateMovie(movie)
+      .then(() => {
+        this.disable(false);
+        this._changeCallback(movie);
+      })
+      .catch(() => {});
+  }
+
   _favoriteChangeHandler() {
-    this._changeCallback(Object.assign({}, this._movie, {favorite: !this._movie.favorite}));
+    this._updateMovieRequest(Object.assign({}, this._movie, {favorite: !this._movie.favorite}));
   }
 
   _watchedChangeHandler() {
     const watched = !this._movie.watched;
     const watchingDate = watched ? new Date() : null;
-    this._changeCallback(Object.assign({}, this._movie, {watched, watchingDate}));
+
+    this._updateMovieRequest(Object.assign({}, this._movie, {watched, watchingDate}));
   }
 
   _watchlistChangeHandler() {
-    this._changeCallback(Object.assign({}, this._movie, {watchlist: !this._movie.watchlist}));
+    this._updateMovieRequest(Object.assign({}, this._movie, {watchlist: !this._movie.watchlist}));
   }
 
   update(movie) {
@@ -49,7 +77,7 @@ export default class MovieCardPresenter {
     const commentsCount = movie.comments.length;
 
     if (this._view) {
-      this._controlsView.updateData(movie);
+      this._controlsView.updateData(Object.assign({}, movie, {disabled: this._state.disabled}));
       this._commentsView.updateData({commentsCount});
       return;
     }
@@ -75,5 +103,10 @@ export default class MovieCardPresenter {
 
     this._view.setClickHandler(this._clickHandler);
     this._container.append(this._view);
+  }
+
+  destroy() {
+    this._view.destroy();
+    this._view = null;
   }
 }
