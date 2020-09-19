@@ -51,13 +51,13 @@ export default class MoviePopupPresenter {
     this._api
       .addComment(this._movie.id, newComment)
       .then(({comments}) => this._commentsModel.add(comments.map(CommentsModel.adaptToClient), this._movie.id))
+      .then(() => {
+        this.disable(false);
+        this._newCommentView.reset();
+      })
       .catch(() => {
         this.disable(false);
         this._newCommentView.showError();
-      })
-      .then(() => {
-        this._newCommentView.reset();
-        this.disable(false);
       });
   }
 
