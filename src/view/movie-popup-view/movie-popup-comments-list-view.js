@@ -2,6 +2,9 @@ import SmartView from '../abstract/smart-view';
 import moment from 'moment';
 import he from "he";
 
+const SHAKE_ANIMATION_TIMEOUT = 600;
+const SHAKE_ANIMATION_TIMEOUT_IN_SEC = SHAKE_ANIMATION_TIMEOUT / 1000;
+
 const EMOJIES = {
   angry: {
     url: `./images/emoji/angry.png`,
@@ -27,7 +30,7 @@ const formatCommentDate = (commentDate) => moment(commentDate).fromNow();
 
 const mapComment = (comment, disabled, deleting) => {
   return (
-    `<li class="film-details__comment">
+    `<li class="film-details__comment" data-id="${comment.id}">
       <span class="film-details__comment-emoji">
         <img src="${EMOJIES[comment.emoji].url}" alt="${EMOJIES[comment.emoji].alt}" width="55" height="55">
       </span>
@@ -60,6 +63,14 @@ export default class MoviePopupCommentsListView extends SmartView {
   _restoreHandlers() {
     this.getElement().querySelectorAll(`.film-details__comment-delete`)
       .forEach((element) => element.addEventListener(`click`, this._deleteClickHandler));
+  }
+
+  showError(commentId) {
+    const commentsList = Array.from(this.getElement().querySelectorAll(`.film-details__comment`));
+    const commentElement = commentsList.find((item) => item.dataset.id === commentId);
+
+    commentElement.style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT_IN_SEC}s`;
+    setTimeout(() => (commentElement.style.animation = ``), SHAKE_ANIMATION_TIMEOUT);
   }
 
   getTemplate() {

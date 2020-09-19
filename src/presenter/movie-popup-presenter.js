@@ -70,11 +70,18 @@ export default class MoviePopupPresenter {
     this._api
       .deleteComment(commentId)
       .then(() => this._commentsModel.delete(commentId, this._movie.id))
-      .catch(() => {})
       .then(() => this._setState({
         deletingCommentId: null,
         disabled: false
-      }));
+      }))
+      .catch(() => {
+        this._setState({
+          deletingCommentId: null,
+          disabled: false
+        });
+
+        this._moviePopupCommentsListView.showError(commentId);
+      });
   }
 
   _setState(state) {
