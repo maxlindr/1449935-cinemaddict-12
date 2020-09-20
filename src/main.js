@@ -10,7 +10,7 @@ import CommentsModel from './models/comments-model';
 import {BoardMode} from './constants';
 import FiltersModel from './models/filters-model';
 import {UpdateType} from './constants';
-import Api from './api';
+import Api from './api/api';
 
 const AUTH_CREDENTIALS = `Basic lkjdfzlkdf746G6kl`;
 const END_POINT = `https://12.ecmascript.pages.academy/cinemaddict`;
@@ -86,4 +86,13 @@ commentsModel.registerObserver((eventType, payload) => {
   }
 
   moviesModel.updateMovie(newMovie, UpdateType.ITEM);
+});
+
+window.addEventListener(`load`, () => {
+  navigator.serviceWorker.register(`/service-worker.js`)
+    .then(() => {
+      console.log(`ServiceWorker available`); // eslint-disable-line
+    }).catch((e) => {
+      console.error(e); // eslint-disable-line
+    });
 });

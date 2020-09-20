@@ -1,5 +1,5 @@
-import CommentsModel from './models/comments-model';
-import MoviesModel from './models/movies-model';
+import CommentsModel from '../models/comments-model';
+import MoviesModel from '../models/movies-model';
 
 const toJSON = (response) => response.json();
 
