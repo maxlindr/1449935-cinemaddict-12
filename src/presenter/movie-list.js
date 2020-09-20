@@ -177,13 +177,13 @@ export default class MovieList {
   _renderAllMovies() {
     this._movieChunksIterator = new ArrayChunkIterator(this._getGeneralBoardMovies(), ALL_MOVIES_BOARD_CARDS_PORTION_COUNT);
 
-    if (this._movieChunksIterator.isDone) {
+    if (!this._movieChunksIterator.hasNext()) {
       return;
     }
 
     this._movieChunksIterator.next().forEach((movie) => this._appendMovieToContainer(this._allMoviesBoardView, movie));
 
-    if (!this._movieChunksIterator.isDone) {
+    if (this._movieChunksIterator.hasNext()) {
       this._renderShowMoreBtnView();
     }
   }
@@ -218,7 +218,7 @@ export default class MovieList {
     this._showMoreBtnView.setClickHandler(() => {
       this._movieChunksIterator.next().forEach((movie) => this._appendMovieToContainer(this._allMoviesBoardView, movie));
 
-      if (this._movieChunksIterator.isDone) {
+      if (!this._movieChunksIterator.hasNext()) {
         this._showMoreBtnView.removeClickHandler();
         this._showMoreBtnView.getElement().remove();
       }

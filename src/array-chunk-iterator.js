@@ -10,7 +10,6 @@ export default class ArrayChunkIterator {
     this._arr = arr;
     this._chunkSize = chunkSize;
     this._counter = 0;
-    this._isDone = arr.length === 0;
   }
 
   /**
@@ -18,24 +17,21 @@ export default class ArrayChunkIterator {
    * @return {array}
    */
   next() {
-    if (this._isDone) {
+    if (!this.hasNext()) {
       throw new RangeError(`Out of range`);
     }
 
     const arr = this._arr.slice(this._counter, this._counter + this._chunkSize);
     this._counter += arr.length;
 
-    if (this._counter >= this._arr.length) {
-      this._isDone = true;
-    }
-
     return arr;
   }
 
   /**
-   * Признак того, что все элементы массива проитерированы
+   * Остались ли элементы в итераторе
+   * @return {Boolean} true если остались элементы
    */
-  get isDone() {
-    return this._isDone;
+  hasNext() {
+    return this._counter < this._arr.length;
   }
 }
