@@ -66,6 +66,16 @@ export default class Api {
       .then((comment) => comment.map(CommentsModel.adaptToClient));
   }
 
+  sync(data) {
+    return this._send({
+      url: `movies/sync`,
+      method: `POST`,
+      body: JSON.stringify(data),
+      headers: new Headers({"Content-Type": `application/json`})
+    })
+      .then(toJSON);
+  }
+
   updateMovie(movie) {
     return this._send({
       url: `movies/${movie.id}`,
