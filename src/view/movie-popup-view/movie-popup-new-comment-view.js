@@ -28,10 +28,10 @@ const mapEmojiToPreviewElementString = (emoji) => {
 };
 
 export default class MoviePopupNewCommentView extends SmartView {
-  constructor(data = {}) {
+  constructor(data = {}, addCommentCallback = () => {}) {
     super(data);
 
-    this._addCommentCallback = () => {};
+    this._addCommentCallback = addCommentCallback;
 
     this._keyDownHandler = this._keyDownHandler.bind(this);
     this._addCommentHandler = this._addCommentHandler.bind(this);
@@ -132,10 +132,6 @@ export default class MoviePopupNewCommentView extends SmartView {
         </div>
       </div>`
     );
-  }
-
-  setAddCommentHandler(callback) {
-    this._addCommentCallback = callback;
   }
 
   showError() {

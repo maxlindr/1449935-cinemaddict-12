@@ -227,8 +227,9 @@ export default class MoviePopupPresenter {
     this._moviePopupCommentsListView = new MoviePopupCommentsListView({comments, disabled: disabled || !this._state.online}, this._deleteCommentHandler);
     render(commentsContainer, this._moviePopupCommentsListView, RenderPosition.BEFOREEND);
 
-    this._newCommentView = new MoviePopupNewCommentView({disabled: commentsOperationsDisabled});
-    this._newCommentView.setAddCommentHandler(this._commentAddHandler);
+    this._newCommentView =
+        new MoviePopupNewCommentView({disabled: commentsOperationsDisabled}, this._commentAddHandler);
+
     render(commentsContainer, this._newCommentView, RenderPosition.BEFOREEND);
 
     render(this._container, this._moviePopupVeiw, RenderPosition.BEFOREEND);
