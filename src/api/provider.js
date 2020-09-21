@@ -58,7 +58,7 @@ export default class Provider {
     if (Provider.isOnline()) {
       return this._api.updateMovie(movie)
         .then((updatedMovie) => {
-          this._moviesStore.setItem(updatedMovie.id, MoviesModel.adaptToServer(updatedMovie));
+          this._moviesStore.setItem(updatedMovie.id, updatedMovie);
           return updatedMovie;
         });
     }

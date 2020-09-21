@@ -70,7 +70,7 @@ export default class Api {
     return this._send({
       url: `movies/sync`,
       method: `POST`,
-      body: JSON.stringify(data),
+      body: JSON.stringify(data.map(MoviesModel.adaptToServer)),
       headers: new Headers({"Content-Type": `application/json`})
     })
       .then(toJSON);
