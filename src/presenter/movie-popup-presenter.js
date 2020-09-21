@@ -16,6 +16,7 @@ export default class MoviePopupPresenter {
     this._state = {
       disabled: false,
       deletingCommentId: null,
+      online: this._getOnlineStatus()
     };
 
     this._escapeKeyDownHandler = this._escapeKeyDownHandler.bind(this);
@@ -25,6 +26,7 @@ export default class MoviePopupPresenter {
     this._watchlistChangeHandler = this._watchlistChangeHandler.bind(this);
     this._favoriteChangeHandler = this._favoriteChangeHandler.bind(this);
     this._handleUpdateMovieRequestError = this._handleUpdateMovieRequestError.bind(this);
+    this._changeOnlineStatusHandler = this._changeOnlineStatusHandler.bind(this);
 
     this.close = this.close.bind(this);
 
@@ -37,6 +39,10 @@ export default class MoviePopupPresenter {
     if (escDownEvt.key === `Escape`) {
       this.close();
     }
+  }
+
+  _changeOnlineStatusHandler() {
+    this._setState({online: this._getOnlineStatus()});
   }
 
   _commentAddHandler(data) {
@@ -59,6 +65,10 @@ export default class MoviePopupPresenter {
         this.disable(false);
         this._newCommentView.showError();
       });
+  }
+
+  _getOnlineStatus() {
+    return window.navigator.onLine;
   }
 
   _deleteCommentHandler(commentId) {
@@ -151,6 +161,8 @@ export default class MoviePopupPresenter {
 
   close() {
     document.removeEventListener(`keydown`, this._escapeKeyDownHandler);
+    window.removeEventListener(`online`, this._changeOnlineStatusHandler);
+    window.removeEventListener(`offline`, this._changeOnlineStatusHandler);
     this._newCommentView.dispose();
     this._moviePopupVeiw.destroy();
     this._moviePopupVeiw = null;
@@ -161,16 +173,17 @@ export default class MoviePopupPresenter {
     this._movie = movie;
 
     const disabled = this._state.disabled;
+    const commentsOperationsDisabled = disabled || !this._state.online;
     const comments = movie.comments.map((commentId) => this._commentsModel.get(commentId));
 
     if (this._moviePopupVeiw) {
       this._controlsView.updateData(Object.assign({}, movie, {disabled}));
       this._commentsCountView.updateData({count: comments.length});
-      this._newCommentView.updateData({disabled});
+      this._newCommentView.updateData({disabled: commentsOperationsDisabled});
 
       this._moviePopupCommentsListView.updateData({
         comments,
-        disabled,
+        disabled: commentsOperationsDisabled,
         deletingId: this._state.deletingCommentId
       });
 
@@ -186,6 +199,8 @@ export default class MoviePopupPresenter {
     }
 
     document.addEventListener(`keydown`, this._escapeKeyDownHandler);
+    window.addEventListener(`online`, this._changeOnlineStatusHandler);
+    window.addEventListener(`offline`, this._changeOnlineStatusHandler);
 
     this._moviePopupVeiw = new MoviePopupView(movie);
     this._moviePopupVeiw.setCloseHandler(this.close);
@@ -209,10 +224,10 @@ export default class MoviePopupPresenter {
     this._commentsCountView = new MoviePopupCommentsCountView({count: movie.comments.length});
     render(commentsContainer, this._commentsCountView, RenderPosition.AFTERBEGIN);
 
-    this._moviePopupCommentsListView = new MoviePopupCommentsListView({comments}, this._deleteCommentHandler);
+    this._moviePopupCommentsListView = new MoviePopupCommentsListView({comments, disabled: disabled || !this._state.online}, this._deleteCommentHandler);
     render(commentsContainer, this._moviePopupCommentsListView, RenderPosition.BEFOREEND);
 
-    this._newCommentView = new MoviePopupNewCommentView();
+    this._newCommentView = new MoviePopupNewCommentView({disabled: commentsOperationsDisabled});
     this._newCommentView.setAddCommentHandler(this._commentAddHandler);
     render(commentsContainer, this._newCommentView, RenderPosition.BEFOREEND);
 
