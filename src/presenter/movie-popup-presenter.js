@@ -224,7 +224,9 @@ export default class MoviePopupPresenter {
     this._commentsCountView = new MoviePopupCommentsCountView({count: movie.comments.length});
     render(commentsContainer, this._commentsCountView, RenderPosition.AFTERBEGIN);
 
-    this._moviePopupCommentsListView = new MoviePopupCommentsListView({comments, disabled: disabled || !this._state.online}, this._deleteCommentHandler);
+    this._moviePopupCommentsListView =
+        new MoviePopupCommentsListView({comments, disabled: commentsOperationsDisabled}, this._deleteCommentHandler);
+
     render(commentsContainer, this._moviePopupCommentsListView, RenderPosition.BEFOREEND);
 
     this._newCommentView =
