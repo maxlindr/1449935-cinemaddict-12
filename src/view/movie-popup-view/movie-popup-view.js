@@ -63,7 +63,7 @@ const createMovieDetailsPopupTemplate = (movieDto) => {
                   <td class="film-details__cell">${movieDto.country}</td>
                 </tr>
                 <tr class="film-details__row">
-                  <td class="film-details__term">Genres</td>
+                  <td class="film-details__term">${movieDto.genres.length > 1 ? `Genres` : `Genre`}</td>
                   <td class="film-details__cell">
                     ${genreElements}
                   </td>
