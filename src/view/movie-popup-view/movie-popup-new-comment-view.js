@@ -95,7 +95,11 @@ export default class MoviePopupNewCommentView extends SmartView {
     this.getElement().querySelector(`.film-details__comment-input`)
       .addEventListener(`input`, this._commentTextChangeHandler);
 
-    document.addEventListener(`keydown`, this._keyDownHandler);
+    if (this._data.disabled) {
+      document.removeEventListener(`keydown`, this._keyDownHandler);
+    } else {
+      document.addEventListener(`keydown`, this._keyDownHandler);
+    }
   }
 
   getTemplate() {
