@@ -14,6 +14,8 @@ export default class Provider {
     this._api = api;
     this._moviesStore = moviesStore;
     this._commentsStore = commentsStore;
+
+    this._dirtyMovies = [];
   }
 
   getMovies() {
@@ -36,14 +38,20 @@ export default class Provider {
       return this._api.getComments(movieId)
         .then((comments) => {
           const items = createStoreStructure(comments.map(CommentsModel.adaptToServer));
-          this._commentsStore.setItems(items);
+          this._commentsStore.addItems(items);
           return comments;
         });
     }
 
     const storeComments = Object.values(this._commentsStore.getItems());
+    const movie = this._moviesStore.getItems()[movieId];
 
-    return Promise.resolve(storeComments.map(CommentsModel.adaptToClient));
+    const movieComments = movie.comments.reduce((acc, currentId) => {
+      const currentComment = storeComments.find((comment) => comment.id === currentId);
+      return [...acc, currentComment];
+    }, []);
+
+    return Promise.resolve(movieComments.map(CommentsModel.adaptToClient));
   }
 
   updateMovie(movie) {
@@ -56,6 +64,7 @@ export default class Provider {
     }
 
     this._moviesStore.setItem(movie.id, MoviesModel.adaptToServer(movie));
+    this._dirtyMovies.push(movie);
 
     return Promise.resolve(movie);
   }
@@ -84,12 +93,15 @@ export default class Provider {
 
   sync() {
     if (Provider.isOnline()) {
-      const storeMovies = Object.values(this._moviesStore.getItems());
-
-      return this._api.sync(storeMovies)
+      return this._api.sync(this._dirtyMovies)
         .then((response) => {
           const items = createStoreStructure(response.updated);
-          this._moviesStore.setItems(items);
+          this._moviesStore.addItems(items);
+
+          this._dirtyMovies = [];
+
+          return Object.values(items)
+            .map(MoviesModel.adaptToClient);
         });
     }
 
@@ -98,5 +110,9 @@ export default class Provider {
 
   static isOnline() {
     return window.navigator.onLine;
+  }
+
+  get dirty() {
+    return this._dirtyMovies.length > 0;
   }
 }

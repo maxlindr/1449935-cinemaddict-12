@@ -11,11 +11,23 @@ import {BoardMode} from './constants';
 import FiltersModel from './models/filters-model';
 import {UpdateType} from './constants';
 import Api from './api/api';
+import Store from './api/store';
+import Provider from './api/provider';
+
+const STORE_PREFIX = `cinemaddict-localstorage`;
+const STORE_VER = `v1`;
+const MOVIES_STORE_NAME = `${STORE_PREFIX}-movies-${STORE_VER}`;
+const COMMENTS_STORE_NAME = `${STORE_PREFIX}-comments-${STORE_VER}`;
 
 const AUTH_CREDENTIALS = `Basic lkjdfzlkdf746G6kl`;
 const END_POINT = `https://12.ecmascript.pages.academy/cinemaddict`;
 
 const api = new Api(END_POINT, AUTH_CREDENTIALS);
+
+const moviesStore = new Store(MOVIES_STORE_NAME, window.localStorage);
+const commentsStore = new Store(COMMENTS_STORE_NAME, window.localStorage);
+const apiWithProvider = new Provider(api, moviesStore, commentsStore);
+
 const moviesModel = new MoviesModel();
 const commentsModel = new CommentsModel();
 const userProfileModel = new UserProfileModel(moviesModel);
@@ -28,7 +40,7 @@ new UserProfilePresenter(header, userProfileModel); // eslint-disable-line no-ne
 const filtersModel = new FiltersModel();
 const mainMenuPresenter = new MainMenuPresenter(main, filtersModel, moviesModel);
 const statisticsPresenter = new StatisticsPresenter(main, moviesModel, userProfileModel);
-const movieBoard = new MovieList(main, filtersModel, moviesModel, commentsModel, api);
+const movieBoard = new MovieList(main, filtersModel, moviesModel, commentsModel, apiWithProvider);
 
 let statisticsClickHandler;
 let filterClickHandler;
@@ -59,9 +71,9 @@ moviesModel.registerObserver((updateType) => {
   }
 });
 
-api.getMovies()
+apiWithProvider.getMovies()
   .then((movies) => {
-    const resolveMovieComments = (movie) => api.getComments(movie.id);
+    const resolveMovieComments = (movie) => apiWithProvider.getComments(movie.id);
 
     return Promise
       .all(movies.map(resolveMovieComments))
@@ -95,4 +107,21 @@ window.addEventListener(`load`, () => {
     }).catch((e) => {
       console.error(e); // eslint-disable-line
     });
+});
+
+window.addEventListener(`online`, () => {
+  document.title = document.title.replace(` [offline]`, ``);
+
+  if (apiWithProvider.dirty) {
+    apiWithProvider.sync()
+      .then((updatedMovies) => {
+        updatedMovies.forEach((movie) => {
+          moviesModel.updateMovie(movie, UpdateType.COLLECTION);
+        });
+      });
+  }
+});
+
+window.addEventListener(`offline`, () => {
+  document.title += ` [offline]`;
 });

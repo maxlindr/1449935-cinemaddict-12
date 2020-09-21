@@ -10,7 +10,7 @@ export default class MoviesModel extends Observable {
   static adaptToClient(movie) {
     /* eslint-disable camelcase */
     const {film_info, user_details, comments} = movie;
-    const {alternative_title, title, poster, age_rating, director, writers, actors, release, description, runtime, genre} = film_info;
+    const {alternative_title, title, poster, age_rating, total_rating, director, writers, actors, release, description, runtime, genre} = film_info;
     const {watchlist, already_watched, watching_date, favorite} = user_details;
 
     return Object.assign(
@@ -20,7 +20,7 @@ export default class MoviesModel extends Observable {
           title: alternative_title,
           originalTitle: title,
           poster,
-          rating: age_rating,
+          rating: total_rating,
           director,
           writers,
           cast: actors,
@@ -56,7 +56,7 @@ export default class MoviesModel extends Observable {
         writers,
         actors: cast,
         release: {
-          date: releaseDate,
+          date: releaseDate.toISOString(),
           release_country: country
         },
         runtime: duration,
@@ -66,7 +66,7 @@ export default class MoviesModel extends Observable {
       user_details: {
         watchlist,
         already_watched: watched,
-        watching_date: watchingDate,
+        watching_date: watchingDate.toISOString(),
         favorite
       }
     };

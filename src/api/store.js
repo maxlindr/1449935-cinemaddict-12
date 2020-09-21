@@ -19,6 +19,19 @@ export default class Store {
     );
   }
 
+  addItems(items) {
+    const oldItems = this.getItems();
+
+    const newItems = Object.values(items)
+      .reduce((acc, current) => {
+        return Object.assign({}, acc, {
+          [current.id]: current,
+        });
+      }, oldItems);
+
+    this.setItems(newItems);
+  }
+
   setItem(key, value) {
     const store = this.getItems();
 

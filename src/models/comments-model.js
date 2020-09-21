@@ -22,9 +22,11 @@ export default class CommentsModel extends Observable {
   }
 
   static adaptToServer(dto) {
-    const {emoji, message, date} = dto;
+    const {emoji, message, date, id, author} = dto;
 
     return {
+      id,
+      author,
       comment: message,
       date,
       emotion: emoji
