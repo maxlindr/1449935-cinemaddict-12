@@ -1,27 +1,9 @@
 import SmartView from '../abstract/smart-view';
 import {animateEmoji} from './emoji-animation';
+import {EMOJIES} from '../../constants';
 
 const SHAKE_ANIMATION_TIMEOUT = 600;
 const SHAKE_ANIMATION_TIMEOUT_IN_SEC = SHAKE_ANIMATION_TIMEOUT / 1000;
-
-const EMOJIES = {
-  angry: {
-    url: `./images/emoji/angry.png`,
-    alt: `emoji-angry`
-  },
-  puke: {
-    url: `./images/emoji/puke.png`,
-    alt: `emoji-puke`
-  },
-  sleeping: {
-    url: `./images/emoji/sleeping.png`,
-    alt: `emoji-sleeping`
-  },
-  smile: {
-    url: `./images/emoji/smile.png`,
-    alt: `emoji-smile`
-  },
-};
 
 const mapEmojiToPreviewElementString = (emoji) => {
   return `<img src="${EMOJIES[emoji].url}" alt="${EMOJIES[emoji].alt}" width="55" height="55">`;

@@ -1,28 +1,10 @@
 import SmartView from '../abstract/smart-view';
 import moment from 'moment';
 import he from "he";
+import {EMOJIES} from '../../constants';
 
 const SHAKE_ANIMATION_TIMEOUT = 600;
 const SHAKE_ANIMATION_TIMEOUT_IN_SEC = SHAKE_ANIMATION_TIMEOUT / 1000;
-
-const EMOJIES = {
-  angry: {
-    url: `./images/emoji/angry.png`,
-    alt: `emoji-angry`
-  },
-  puke: {
-    url: `./images/emoji/puke.png`,
-    alt: `emoji-puke`
-  },
-  sleeping: {
-    url: `./images/emoji/sleeping.png`,
-    alt: `emoji-sleeping`
-  },
-  smile: {
-    url: `./images/emoji/smile.png`,
-    alt: `emoji-smile`
-  },
-};
 
 moment.locale(`en`);
 

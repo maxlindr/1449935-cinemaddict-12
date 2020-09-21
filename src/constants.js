@@ -24,3 +24,23 @@ export const StatsInterval = {
   MONTH: `month`,
   YEAR: `year`
 };
+
+
+export const EMOJIES = {
+  angry: {
+    url: `./images/emoji/angry.png`,
+    alt: `emoji-angry`
+  },
+  puke: {
+    url: `./images/emoji/puke.png`,
+    alt: `emoji-puke`
+  },
+  sleeping: {
+    url: `./images/emoji/sleeping.png`,
+    alt: `emoji-sleeping`
+  },
+  smile: {
+    url: `./images/emoji/smile.png`,
+    alt: `emoji-smile`
+  },
+};
