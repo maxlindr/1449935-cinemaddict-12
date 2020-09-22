@@ -30,6 +30,25 @@ export default class MainMenuView extends SmartView {
     this._statsClickHandler = this._statsClickHandler.bind(this);
   }
 
+  getTemplate() {
+    return createMainMenuTemplate(this._data);
+  }
+
+  setActiveFilterChangeHandler(callback) {
+    this._filterChangeCallback = callback;
+  }
+
+  setStatsClickHandler(callback) {
+    this._statsClickCallback = callback;
+  }
+
+  _restoreHandlers() {
+    this.getElement().querySelectorAll(`.main-navigation__item`)
+      .forEach((element) => element.addEventListener(`click`, this._filterClickHandler));
+
+    this.getElement().querySelector(`.main-navigation__additional`).addEventListener(`click`, this._statsClickHandler);
+  }
+
   _filterClickHandler(evt) {
     evt.preventDefault();
 
@@ -51,24 +70,5 @@ export default class MainMenuView extends SmartView {
   _statsClickHandler(evt) {
     evt.preventDefault();
     this._statsClickCallback();
-  }
-
-  _restoreHandlers() {
-    this.getElement().querySelectorAll(`.main-navigation__item`)
-      .forEach((element) => element.addEventListener(`click`, this._filterClickHandler));
-
-    this.getElement().querySelector(`.main-navigation__additional`).addEventListener(`click`, this._statsClickHandler);
-  }
-
-  getTemplate() {
-    return createMainMenuTemplate(this._data);
-  }
-
-  setActiveFilterChangeHandler(callback) {
-    this._filterChangeCallback = callback;
-  }
-
-  setStatsClickHandler(callback) {
-    this._statsClickCallback = callback;
   }
 }

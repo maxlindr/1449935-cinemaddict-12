@@ -20,6 +20,10 @@ export default class MoviesSortBarView extends SmartView {
     );
   }
 
+  setSortTypeChangeHandler(callback) {
+    this._sortTypeChangeCallback = callback;
+  }
+
   _restoreHandlers() {
     this.getElement().addEventListener(`click`, this._sortTypeChangeHandler);
   }
@@ -31,9 +35,5 @@ export default class MoviesSortBarView extends SmartView {
 
     evt.preventDefault();
     this._sortTypeChangeCallback(evt.target.dataset.sortType);
-  }
-
-  setSortTypeChangeHandler(callback) {
-    this._sortTypeChangeCallback = callback;
   }
 }

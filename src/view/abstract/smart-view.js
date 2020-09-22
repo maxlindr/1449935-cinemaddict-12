@@ -23,16 +23,6 @@ export default class SmartView extends AbstractView {
     }
   }
 
-  _shouldElementUpdate(stateData) {
-    for (const [key, prop] of Object.entries(stateData)) {
-      if (prop !== this._data[key]) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
   getElement() {
     if (this._element) {
       return this._element;
@@ -52,6 +42,16 @@ export default class SmartView extends AbstractView {
 
     parent.replaceChild(newElement, prevElement);
     prevElement = null;
+  }
+
+  _shouldElementUpdate(stateData) {
+    for (const [key, prop] of Object.entries(stateData)) {
+      if (prop !== this._data[key]) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   _restoreHandlers() {

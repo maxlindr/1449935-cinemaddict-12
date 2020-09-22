@@ -35,110 +35,6 @@ export default class MoviePopupPresenter {
     this.update(movie);
   }
 
-  _escapeKeyDownHandler(escDownEvt) {
-    if (escDownEvt.key === `Escape`) {
-      this.close();
-    }
-  }
-
-  _changeOnlineStatusHandler() {
-    this._setState({online: this._getOnlineStatus()});
-  }
-
-  _commentAddHandler(comment) {
-    const newComment = {
-      emoji: comment.emoji,
-      message: comment.message,
-      date: new Date()
-    };
-
-    this.disable(true);
-
-    this._api
-      .addComment(this._movie.id, newComment)
-      .then(({comments}) => this._commentsModel.add(comments.map(CommentsModel.adaptToClient), this._movie.id))
-      .then(() => {
-        this.disable(false);
-        this._newCommentView.reset();
-      })
-      .catch(() => {
-        this.disable(false);
-        this._newCommentView.showError();
-      });
-  }
-
-  _getOnlineStatus() {
-    return window.navigator.onLine;
-  }
-
-  _deleteCommentHandler(commentId) {
-    this._setState({
-      deletingCommentId: commentId,
-      disabled: true
-    });
-
-    this._api
-      .deleteComment(commentId)
-      .then(() => this._commentsModel.delete(commentId, this._movie.id))
-      .then(() => this._setState({
-        deletingCommentId: null,
-        disabled: false
-      }))
-      .catch(() => {
-        this._setState({
-          deletingCommentId: null,
-          disabled: false
-        });
-
-        this._moviePopupCommentsListView.showError(commentId);
-      });
-  }
-
-  _setState(state) {
-    this._state = Object.assign({}, this._state, state);
-    this.update(this._movie);
-  }
-
-  _updateMovieRequest(movie) {
-    this.disable(true);
-
-    return this._api
-      .updateMovie(movie)
-      .catch(console.error) // eslint-disable-line no-console
-      .then(() => this.disable(false));
-  }
-
-  _handleUpdateMovieRequestError(err) { // eslint-disable-line no-unused-vars
-    // console.error(err);
-  }
-
-  _favoriteChangeHandler() {
-    const newMovie = Object.assign({}, this._movie, {favorite: !this._movie.favorite});
-
-    this._updateMovieRequest(newMovie)
-      .then(() => this._changeCallback(newMovie))
-      .catch(this._handleUpdateMovieRequestError);
-  }
-
-  _watchedChangeHandler() {
-    const watched = !this._movie.watched;
-    const watchingDate = watched ? new Date() : new Date(0);
-
-    const newMovie = Object.assign({}, this._movie, {watched, watchingDate});
-
-    this._updateMovieRequest(newMovie)
-      .then(() => this._changeCallback(newMovie))
-      .catch(this._handleUpdateMovieRequestError);
-  }
-
-  _watchlistChangeHandler() {
-    const newMovie = Object.assign({}, this._movie, {watchlist: !this._movie.watchlist});
-
-    this._updateMovieRequest(newMovie)
-      .then(() => this._changeCallback(newMovie))
-      .catch(this._handleUpdateMovieRequestError);
-  }
-
   /**
    * Возвращает состояние попапа: активен или скрыт
    * @return {boolean} активен ли попап
@@ -235,5 +131,109 @@ export default class MoviePopupPresenter {
     render(commentsContainer, this._newCommentView, RenderPosition.BEFOREEND);
 
     render(this._container, this._moviePopupVeiw, RenderPosition.BEFOREEND);
+  }
+
+  _getOnlineStatus() {
+    return window.navigator.onLine;
+  }
+
+  _setState(state) {
+    this._state = Object.assign({}, this._state, state);
+    this.update(this._movie);
+  }
+
+  _updateMovieRequest(movie) {
+    this.disable(true);
+
+    return this._api
+      .updateMovie(movie)
+      .catch(console.error) // eslint-disable-line no-console
+      .then(() => this.disable(false));
+  }
+
+  _handleUpdateMovieRequestError(err) { // eslint-disable-line no-unused-vars
+    // console.error(err);
+  }
+
+  _escapeKeyDownHandler(escDownEvt) {
+    if (escDownEvt.key === `Escape`) {
+      this.close();
+    }
+  }
+
+  _changeOnlineStatusHandler() {
+    this._setState({online: this._getOnlineStatus()});
+  }
+
+  _commentAddHandler(comment) {
+    const newComment = {
+      emoji: comment.emoji,
+      message: comment.message,
+      date: new Date()
+    };
+
+    this.disable(true);
+
+    this._api
+      .addComment(this._movie.id, newComment)
+      .then(({comments}) => this._commentsModel.add(comments.map(CommentsModel.adaptToClient), this._movie.id))
+      .then(() => {
+        this.disable(false);
+        this._newCommentView.reset();
+      })
+      .catch(() => {
+        this.disable(false);
+        this._newCommentView.showError();
+      });
+  }
+
+  _deleteCommentHandler(commentId) {
+    this._setState({
+      deletingCommentId: commentId,
+      disabled: true
+    });
+
+    this._api
+      .deleteComment(commentId)
+      .then(() => this._commentsModel.delete(commentId, this._movie.id))
+      .then(() => this._setState({
+        deletingCommentId: null,
+        disabled: false
+      }))
+      .catch(() => {
+        this._setState({
+          deletingCommentId: null,
+          disabled: false
+        });
+
+        this._moviePopupCommentsListView.showError(commentId);
+      });
+  }
+
+  _favoriteChangeHandler() {
+    const newMovie = Object.assign({}, this._movie, {favorite: !this._movie.favorite});
+
+    this._updateMovieRequest(newMovie)
+      .then(() => this._changeCallback(newMovie))
+      .catch(this._handleUpdateMovieRequestError);
+  }
+
+  _watchedChangeHandler() {
+    const watched = !this._movie.watched;
+    const watchingDate = watched ? new Date() : new Date(0);
+
+    const newMovie = Object.assign({}, this._movie, {watched, watchingDate});
+
+    this._updateMovieRequest(newMovie)
+      .then(() => this._changeCallback(newMovie))
+      .catch(this._handleUpdateMovieRequestError);
+  }
+
+  _watchlistChangeHandler() {
+    const newMovie = Object.assign({}, this._movie, {watchlist: !this._movie.watchlist});
+
+    this._updateMovieRequest(newMovie)
+      .then(() => this._changeCallback(newMovie))
+      .catch(this._handleUpdateMovieRequestError);
   }
 }

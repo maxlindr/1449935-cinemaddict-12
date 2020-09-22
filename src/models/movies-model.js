@@ -7,6 +7,31 @@ export default class MoviesModel extends Observable {
     this._movies = movies.slice();
   }
 
+  get(id) {
+    return this._movies.find((movie) => movie.id === id);
+  }
+
+  getAll() {
+    return this._movies.slice();
+  }
+
+  set(movies, updateType) {
+    this._movies = movies.slice();
+    this._notify(updateType || UpdateType.COLLECTION, this._movies.slice());
+  }
+
+  updateMovie(movie, updateType) {
+    const index = this._movies.findIndex((item) => item.id === movie.id);
+
+    if (index === -1) {
+      throw new Error(`Can't update unexisting movie`);
+    }
+
+    this._movies.splice(index, 1, movie);
+
+    this._notify(updateType, movie);
+  }
+
   static adaptToClient(movie) {
     /* eslint-disable camelcase */
     const {film_info, user_details, comments} = movie;
@@ -70,30 +95,5 @@ export default class MoviesModel extends Observable {
         favorite
       }
     };
-  }
-
-  get(id) {
-    return this._movies.find((movie) => movie.id === id);
-  }
-
-  getAll() {
-    return this._movies.slice();
-  }
-
-  set(movies, updateType) {
-    this._movies = movies.slice();
-    this._notify(updateType || UpdateType.COLLECTION, this._movies.slice());
-  }
-
-  updateMovie(movie, updateType) {
-    const index = this._movies.findIndex((item) => item.id === movie.id);
-
-    if (index === -1) {
-      throw new Error(`Can't update unexisting movie`);
-    }
-
-    this._movies.splice(index, 1, movie);
-
-    this._notify(updateType, movie);
   }
 }

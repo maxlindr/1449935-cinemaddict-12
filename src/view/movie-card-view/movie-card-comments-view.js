@@ -9,15 +9,6 @@ export default class MovieCardCommentsView extends SmartView {
     this._clickHandler = this._clickHandler.bind(this);
   }
 
-  _clickHandler(evt) {
-    evt.preventDefault();
-    this._clickCallback();
-  }
-
-  _restoreHandlers() {
-    this.getElement().addEventListener(`click`, this._clickHandler);
-  }
-
   setClickHandler(callback) {
     this._clickCallback = callback;
   }
@@ -26,5 +17,14 @@ export default class MovieCardCommentsView extends SmartView {
     return (
       `<a class="film-card__comments">${this._data.commentsCount} comments</a>`
     );
+  }
+
+  _restoreHandlers() {
+    this.getElement().addEventListener(`click`, this._clickHandler);
+  }
+
+  _clickHandler(evt) {
+    evt.preventDefault();
+    this._clickCallback();
   }
 }

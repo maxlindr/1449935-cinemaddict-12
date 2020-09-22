@@ -36,42 +36,6 @@ export default class MovieCardPresenter {
     this._changeCallback = callback;
   }
 
-  _clickHandler(evt) {
-    this._clickCallback(evt);
-  }
-
-  _setState(state) {
-    this._state = Object.assign({}, this._state, state);
-    this.update(this._movie);
-  }
-
-  _updateMovieRequest(movie) {
-    this.disable(true);
-
-    return this._api
-      .updateMovie(movie)
-      .then(() => {
-        this.disable(false);
-        this._changeCallback(movie);
-      })
-      .catch(() => {});
-  }
-
-  _favoriteChangeHandler() {
-    this._updateMovieRequest(Object.assign({}, this._movie, {favorite: !this._movie.favorite}));
-  }
-
-  _watchedChangeHandler() {
-    const watched = !this._movie.watched;
-    const watchingDate = watched ? new Date() : new Date(0);
-
-    this._updateMovieRequest(Object.assign({}, this._movie, {watched, watchingDate}));
-  }
-
-  _watchlistChangeHandler() {
-    this._updateMovieRequest(Object.assign({}, this._movie, {watchlist: !this._movie.watchlist}));
-  }
-
   update(movie) {
     this._movie = movie;
     const commentsCount = movie.comments.length;
@@ -108,5 +72,41 @@ export default class MovieCardPresenter {
   destroy() {
     this._view.destroy();
     this._view = null;
+  }
+
+  _setState(state) {
+    this._state = Object.assign({}, this._state, state);
+    this.update(this._movie);
+  }
+
+  _updateMovieRequest(movie) {
+    this.disable(true);
+
+    return this._api
+      .updateMovie(movie)
+      .then(() => {
+        this.disable(false);
+        this._changeCallback(movie);
+      })
+      .catch(() => {});
+  }
+
+  _clickHandler(evt) {
+    this._clickCallback(evt);
+  }
+
+  _favoriteChangeHandler() {
+    this._updateMovieRequest(Object.assign({}, this._movie, {favorite: !this._movie.favorite}));
+  }
+
+  _watchedChangeHandler() {
+    const watched = !this._movie.watched;
+    const watchingDate = watched ? new Date() : new Date(0);
+
+    this._updateMovieRequest(Object.assign({}, this._movie, {watched, watchingDate}));
+  }
+
+  _watchlistChangeHandler() {
+    this._updateMovieRequest(Object.assign({}, this._movie, {watchlist: !this._movie.watchlist}));
   }
 }

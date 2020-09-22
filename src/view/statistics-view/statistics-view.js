@@ -27,16 +27,6 @@ export default class StatisticsView extends SmartView {
     this._statsIntervalChangeHandler = this._statsIntervalChangeHandler.bind(this);
   }
 
-  _restoreHandlers() {
-    this.getElement().querySelectorAll(`.statistic__filters-input`)
-      .forEach((input) => input.addEventListener(`change`, this._statsIntervalChangeHandler));
-  }
-
-  _statsIntervalChangeHandler(evt) {
-    evt.preventDefault();
-    this.statsIntervalChangeCallback(evt.target.value);
-  }
-
   updateData(statisticsData) {
     super.updateData(statisticsData);
     const statisticCtx = document.querySelector(`.statistic__chart`);
@@ -99,5 +89,15 @@ export default class StatisticsView extends SmartView {
       </div>
 
     </section>`);
+  }
+
+  _restoreHandlers() {
+    this.getElement().querySelectorAll(`.statistic__filters-input`)
+      .forEach((input) => input.addEventListener(`change`, this._statsIntervalChangeHandler));
+  }
+
+  _statsIntervalChangeHandler(evt) {
+    evt.preventDefault();
+    this.statsIntervalChangeCallback(evt.target.value);
   }
 }

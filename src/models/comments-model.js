@@ -9,30 +9,6 @@ export default class CommentsModel extends Observable {
     this._comments = convertCommentsArrayToMap(comments);
   }
 
-  static adaptToClient(dto) {
-    const {id, author, comment, date, emotion} = dto;
-
-    return {
-      id,
-      emoji: emotion,
-      message: comment,
-      author,
-      date: new Date(date)
-    };
-  }
-
-  static adaptToServer(dto) {
-    const {emoji, message, date, id, author} = dto;
-
-    return {
-      id,
-      author,
-      comment: message,
-      date,
-      emotion: emoji
-    };
-  }
-
   get(id) {
     return this._comments.get(id);
   }
@@ -69,6 +45,30 @@ export default class CommentsModel extends Observable {
 
   setAll(comments) {
     this._comments = convertCommentsArrayToMap(comments);
+  }
+
+  static adaptToClient(dto) {
+    const {id, author, comment, date, emotion} = dto;
+
+    return {
+      id,
+      emoji: emotion,
+      message: comment,
+      author,
+      date: new Date(date)
+    };
+  }
+
+  static adaptToServer(dto) {
+    const {emoji, message, date, id, author} = dto;
+
+    return {
+      id,
+      author,
+      comment: message,
+      date,
+      emotion: emoji
+    };
   }
 }
 

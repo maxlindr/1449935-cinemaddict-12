@@ -40,11 +40,6 @@ export default class StatisticsPresenter {
     }
   }
 
-  _userProfileModelChangedHandler(updateType, payload) {
-    this._data = Object.assign({}, this._data, payload);
-    this._update();
-  }
-
   init() {
     if (!this._view) {
       this._data = {user: this._userProfileModel.getProfile()};
@@ -58,11 +53,6 @@ export default class StatisticsPresenter {
 
   _createViewData() {
     return Object.assign({}, this._data, {filter: this._statsInterval}, {movies: statsFilters[this._statsInterval](this._moviesModel.getAll())});
-  }
-
-  _statsIntervalChangeHandler(interval) {
-    this._statsInterval = interval;
-    this._update();
   }
 
   _moviesModelChanged() {
@@ -85,5 +75,15 @@ export default class StatisticsPresenter {
     }
 
     this._view.updateData(this._createViewData());
+  }
+
+  _userProfileModelChangedHandler(updateType, payload) {
+    this._data = Object.assign({}, this._data, payload);
+    this._update();
+  }
+
+  _statsIntervalChangeHandler(interval) {
+    this._statsInterval = interval;
+    this._update();
   }
 }

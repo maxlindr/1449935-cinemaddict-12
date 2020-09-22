@@ -21,13 +21,6 @@ export default class MoviePopupNewCommentView extends SmartView {
     this._commentTextChangeHandler = this._commentTextChangeHandler.bind(this);
   }
 
-  _addCommentHandler() {
-    this._addCommentCallback({
-      emoji: this._data.emoji,
-      message: this._data.message
-    });
-  }
-
   reset() {
     this.updateData({
       emoji: ``,
@@ -37,51 +30,6 @@ export default class MoviePopupNewCommentView extends SmartView {
 
   dispose() {
     document.removeEventListener(`keydown`, this._keyDownHandler);
-  }
-
-  _commentEmojiChangeHandler(evt) {
-    this.updateData({emoji: evt.target.value});
-  }
-
-  _commentTextChangeHandler(evt) {
-    this.updateData({message: evt.target.value}, true);
-  }
-
-  // обработчик на нажатие Ctrl/Command + Enter
-  _keyDownHandler(evt) {
-    if (!evt.ctrlKey || evt.key !== `Enter`) {
-      return;
-    }
-
-    const commentInput = this.getElement().querySelector(`.film-details__comment-input`);
-    const isCommentInputValid = commentInput.checkValidity();
-
-    if (this._data.emoji && isCommentInputValid) {
-      this._addCommentHandler();
-      return;
-    }
-
-    if (!this._data.emoji) {
-      this._runEmojiMissedAnimation();
-    }
-
-    if (!isCommentInputValid) {
-      commentInput.reportValidity();
-    }
-  }
-
-  _restoreHandlers() {
-    this.getElement().querySelectorAll(`.film-details__emoji-item`)
-      .forEach((input) => input.addEventListener(`click`, this._commentEmojiChangeHandler));
-
-    this.getElement().querySelector(`.film-details__comment-input`)
-      .addEventListener(`input`, this._commentTextChangeHandler);
-
-    if (this._data.disabled) {
-      document.removeEventListener(`keydown`, this._keyDownHandler);
-    } else {
-      document.addEventListener(`keydown`, this._keyDownHandler);
-    }
   }
 
   getTemplate() {
@@ -134,5 +82,57 @@ export default class MoviePopupNewCommentView extends SmartView {
 
     // анимация кнопок эмодзи
     this.getElement().querySelectorAll(`.film-details__emoji-label`).forEach(animateEmoji);
+  }
+
+  _restoreHandlers() {
+    this.getElement().querySelectorAll(`.film-details__emoji-item`)
+      .forEach((input) => input.addEventListener(`click`, this._commentEmojiChangeHandler));
+
+    this.getElement().querySelector(`.film-details__comment-input`)
+      .addEventListener(`input`, this._commentTextChangeHandler);
+
+    if (this._data.disabled) {
+      document.removeEventListener(`keydown`, this._keyDownHandler);
+    } else {
+      document.addEventListener(`keydown`, this._keyDownHandler);
+    }
+  }
+
+  _addCommentHandler() {
+    this._addCommentCallback({
+      emoji: this._data.emoji,
+      message: this._data.message
+    });
+  }
+
+  _commentEmojiChangeHandler(evt) {
+    this.updateData({emoji: evt.target.value});
+  }
+
+  _commentTextChangeHandler(evt) {
+    this.updateData({message: evt.target.value}, true);
+  }
+
+  // обработчик на нажатие Ctrl/Command + Enter
+  _keyDownHandler(evt) {
+    if (!evt.ctrlKey || evt.key !== `Enter`) {
+      return;
+    }
+
+    const commentInput = this.getElement().querySelector(`.film-details__comment-input`);
+    const isCommentInputValid = commentInput.checkValidity();
+
+    if (this._data.emoji && isCommentInputValid) {
+      this._addCommentHandler();
+      return;
+    }
+
+    if (!this._data.emoji) {
+      this._runEmojiMissedAnimation();
+    }
+
+    if (!isCommentInputValid) {
+      commentInput.reportValidity();
+    }
   }
 }

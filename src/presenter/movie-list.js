@@ -84,6 +84,33 @@ export default class MovieList {
     this._filtersModel.registerObserver(this._filterChangeHandler);
   }
 
+  setBoardMode(boardMode) {
+    if (this._boardMode === boardMode) {
+      return;
+    }
+
+    this._boardMode = boardMode;
+
+    this._clearAllMoviesBoard();
+    this._renderAllMovies();
+  }
+
+  destroy() {
+    this._filtersModel.unregisterObserver(this._filterChangeHandler);
+    this._moviesModel.unregisterObserver(this._modelEventHandler);
+
+    this._clearAllMoviesBoard();
+    this._clearTopRatedBoard();
+    this._clearMostCommentedBoard();
+
+    this._allMoviesBoardView.destroy();
+    this._topRatedBoard.destroy();
+    this._mostCommentedBoard.destroy();
+
+    this._moviesSortBarView.destroy();
+    this._boardsContainerView.destroy();
+  }
+
   _appendMovieToContainer(container, movie) {
     const cardElementClickHandler = () => {
       if (this._activePopup) {
@@ -123,47 +150,6 @@ export default class MovieList {
         this._generalMoviePresentersMap.set(movie.id, movieCard);
         break;
     }
-  }
-
-  _filterChangeHandler(event) {
-    if (this._boardMode === event) {
-      return;
-    }
-
-    this._moviesSortBarView.updateData({sortType: SortType.DEFAULT});
-    this._sortType = SortType.DEFAULT;
-
-    this._boardMode = event;
-    this._clearAllMoviesBoard();
-    this._renderAllMovies();
-  }
-
-  _modelEventHandler(updateType, updatedMovie) {
-    this._isLoading = false;
-
-    if (updateType === UpdateType.INIT) {
-      this._loadingView.destroy();
-      this._renderBoard();
-    } else if (updateType === UpdateType.ITEM) {
-      this._updateMovie(updatedMovie);
-      this._redrawMostCommentedBoard();
-    } else {
-      this._updateMovie(updatedMovie);
-      this._clearAllMoviesBoard();
-      this._renderAllMovies();
-      this._redrawTopRatedBoard();
-      this._redrawMostCommentedBoard();
-    }
-  }
-
-  _viewActionHandler(movie) {
-    const oldMovie = this._moviesModel.get(movie.id);
-
-    const updateType = (this._boardMode === BoardMode.ALL || !testMovieStatusChanged(movie, oldMovie))
-      ? UpdateType.ITEM
-      : UpdateType.COLLECTION;
-
-    this._moviesModel.updateMovie(movie, updateType);
   }
 
   _renderAllMoviesBoard() {
@@ -344,30 +330,44 @@ export default class MovieList {
     }
   }
 
-  setBoardMode(boardMode) {
-    if (this._boardMode === boardMode) {
+  _filterChangeHandler(event) {
+    if (this._boardMode === event) {
       return;
     }
 
-    this._boardMode = boardMode;
+    this._moviesSortBarView.updateData({sortType: SortType.DEFAULT});
+    this._sortType = SortType.DEFAULT;
 
+    this._boardMode = event;
     this._clearAllMoviesBoard();
     this._renderAllMovies();
   }
 
-  destroy() {
-    this._filtersModel.unregisterObserver(this._filterChangeHandler);
-    this._moviesModel.unregisterObserver(this._modelEventHandler);
+  _modelEventHandler(updateType, updatedMovie) {
+    this._isLoading = false;
 
-    this._clearAllMoviesBoard();
-    this._clearTopRatedBoard();
-    this._clearMostCommentedBoard();
+    if (updateType === UpdateType.INIT) {
+      this._loadingView.destroy();
+      this._renderBoard();
+    } else if (updateType === UpdateType.ITEM) {
+      this._updateMovie(updatedMovie);
+      this._redrawMostCommentedBoard();
+    } else {
+      this._updateMovie(updatedMovie);
+      this._clearAllMoviesBoard();
+      this._renderAllMovies();
+      this._redrawTopRatedBoard();
+      this._redrawMostCommentedBoard();
+    }
+  }
 
-    this._allMoviesBoardView.destroy();
-    this._topRatedBoard.destroy();
-    this._mostCommentedBoard.destroy();
+  _viewActionHandler(movie) {
+    const oldMovie = this._moviesModel.get(movie.id);
 
-    this._moviesSortBarView.destroy();
-    this._boardsContainerView.destroy();
+    const updateType = (this._boardMode === BoardMode.ALL || !testMovieStatusChanged(movie, oldMovie))
+      ? UpdateType.ITEM
+      : UpdateType.COLLECTION;
+
+    this._moviesModel.updateMovie(movie, updateType);
   }
 }

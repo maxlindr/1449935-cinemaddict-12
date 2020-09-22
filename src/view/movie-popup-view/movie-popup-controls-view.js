@@ -1,14 +1,6 @@
 import MovieControlsView from '../abstract/movie-controls-vew';
 
 export default class MoviePopupControlsView extends MovieControlsView {
-  _restoreHandlers() {
-    const element = this.getElement();
-
-    element.querySelector(`#watched`).addEventListener(`change`, this._watchedClickHandler);
-    element.querySelector(`#watchlist`).addEventListener(`change`, this._watchlistClickHandler);
-    element.querySelector(`#favorite`).addEventListener(`change`, this._favoriteClickHandler);
-  }
-
   getTemplate() {
     return (
       `<section class="film-details__controls">
@@ -23,5 +15,13 @@ export default class MoviePopupControlsView extends MovieControlsView {
         </section>
       </div>`
     );
+  }
+
+  _restoreHandlers() {
+    const element = this.getElement();
+
+    element.querySelector(`#watched`).addEventListener(`change`, this._watchedClickHandler);
+    element.querySelector(`#watchlist`).addEventListener(`change`, this._watchlistClickHandler);
+    element.querySelector(`#favorite`).addEventListener(`change`, this._favoriteClickHandler);
   }
 }

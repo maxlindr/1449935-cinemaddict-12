@@ -37,16 +37,6 @@ export default class MoviePopupCommentsListView extends SmartView {
     this._deleteClickHandler = this._deleteClickHandler.bind(this);
   }
 
-  _deleteClickHandler(evt) {
-    evt.preventDefault();
-    this._deleteClickCallback(evt.target.dataset.id);
-  }
-
-  _restoreHandlers() {
-    this.getElement().querySelectorAll(`.film-details__comment-delete`)
-      .forEach((element) => element.addEventListener(`click`, this._deleteClickHandler));
-  }
-
   showError(commentId) {
     const commentsList = Array.from(this.getElement().querySelectorAll(`.film-details__comment`));
     const commentElement = commentsList.find((item) => item.dataset.id === commentId);
@@ -61,5 +51,15 @@ export default class MoviePopupCommentsListView extends SmartView {
         ${this._data.comments.map((comment) => mapComment(comment, this._data.disabled, comment.id === this._data.deletingId)).join(`\n`)}
       </ul>`
     );
+  }
+
+  _restoreHandlers() {
+    this.getElement().querySelectorAll(`.film-details__comment-delete`)
+      .forEach((element) => element.addEventListener(`click`, this._deleteClickHandler));
+  }
+
+  _deleteClickHandler(evt) {
+    evt.preventDefault();
+    this._deleteClickCallback(evt.target.dataset.id);
   }
 }

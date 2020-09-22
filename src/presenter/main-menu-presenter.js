@@ -30,13 +30,20 @@ export default class MainMenuPresenter {
     this._update();
   }
 
-  _modeChangeHandler(mode) {
-    this._mode = mode;
-    this._filtersModel.setActive(mode);
+  removeStatsClickHandler() {
+    this._statsClickCallback = () => {};
   }
 
-  _statsClickHandler() {
-    this._statsClickCallback();
+  removeFilterClickHandler() {
+    this._filterClickCallback = () => {};
+  }
+
+  setStatsClickHandler(callback) {
+    this._statsClickCallback = callback;
+  }
+
+  setFilterClickHandler(callback) {
+    this._filterClickCallback = callback;
   }
 
   _update() {
@@ -64,19 +71,12 @@ export default class MainMenuPresenter {
     render(this._container, this._view, RenderPosition.BEFOREEND);
   }
 
-  removeStatsClickHandler() {
-    this._statsClickCallback = () => {};
+  _modeChangeHandler(mode) {
+    this._mode = mode;
+    this._filtersModel.setActive(mode);
   }
 
-  removeFilterClickHandler() {
-    this._filterClickCallback = () => {};
-  }
-
-  setStatsClickHandler(callback) {
-    this._statsClickCallback = callback;
-  }
-
-  setFilterClickHandler(callback) {
-    this._filterClickCallback = callback;
+  _statsClickHandler() {
+    this._statsClickCallback();
   }
 }

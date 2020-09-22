@@ -33,8 +33,12 @@ export default class MovieCardView extends SmartView {
     this._clickHandler = this._clickHandler.bind(this);
   }
 
-  _clickHandler(evt) {
-    this._clickCallback(evt);
+  getTemplate() {
+    return createMovieCardTemplate(this._data);
+  }
+
+  setClickHandler(callback) {
+    this._clickCallback = callback;
   }
 
   _restoreHandlers() {
@@ -42,11 +46,7 @@ export default class MovieCardView extends SmartView {
       .forEach((it) => it.addEventListener(`click`, this._clickHandler));
   }
 
-  getTemplate() {
-    return createMovieCardTemplate(this._data);
-  }
-
-  setClickHandler(callback) {
-    this._clickCallback = callback;
+  _clickHandler(evt) {
+    this._clickCallback(evt);
   }
 }

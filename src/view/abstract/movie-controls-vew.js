@@ -13,6 +13,18 @@ export default class MovieControlsView extends SmartView {
     this._watchlistClickHandler = this._watchlistClickHandler.bind(this);
   }
 
+  setFavoriteChangeHandler(callback) {
+    this._favoriteClickCallback = callback;
+  }
+
+  setWatchedChangeHandler(callback) {
+    this._watchedClickCallback = callback;
+  }
+
+  setWatchlistChangeHandler(callback) {
+    this._watchlistClickCallback = callback;
+  }
+
   _favoriteClickHandler(evt) {
     evt.preventDefault();
     this._favoriteClickCallback(evt);
@@ -26,17 +38,5 @@ export default class MovieControlsView extends SmartView {
   _watchlistClickHandler(evt) {
     evt.preventDefault();
     this._watchlistClickCallback(evt);
-  }
-
-  setFavoriteChangeHandler(callback) {
-    this._favoriteClickCallback = callback;
-  }
-
-  setWatchedChangeHandler(callback) {
-    this._watchedClickCallback = callback;
-  }
-
-  setWatchlistChangeHandler(callback) {
-    this._watchlistClickCallback = callback;
   }
 }

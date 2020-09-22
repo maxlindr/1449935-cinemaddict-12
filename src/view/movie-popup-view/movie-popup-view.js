@@ -101,30 +101,6 @@ export default class MovieDetailsPopupView extends SmartView {
     this._watchlistChangeHandler = this._watchlistChangeHandler.bind(this);
   }
 
-  _closeBtnClickHandler() {
-    if (this._closeCallback) {
-      this._closeCallback();
-    }
-  }
-
-  _favoriteChangeHandler() {
-    if (this._favoriteChangeCallback) {
-      this._favoriteChangeCallback();
-    }
-  }
-
-  _watchedChangeHandler() {
-    if (this._watchedChangeCallback) {
-      this._watchedChangeCallback();
-    }
-  }
-
-  _watchlistChangeHandler() {
-    if (this._watchlistChangeCallback) {
-      this._watchlistChangeCallback();
-    }
-  }
-
   getTemplate() {
     return createMovieDetailsPopupTemplate(this._data);
   }
@@ -155,5 +131,29 @@ export default class MovieDetailsPopupView extends SmartView {
 
   _restoreHandlers() {
     this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._closeBtnClickHandler);
+  }
+
+  _closeBtnClickHandler() {
+    if (this._closeCallback) {
+      this._closeCallback();
+    }
+  }
+
+  _favoriteChangeHandler() {
+    if (this._favoriteChangeCallback) {
+      this._favoriteChangeCallback();
+    }
+  }
+
+  _watchedChangeHandler() {
+    if (this._watchedChangeCallback) {
+      this._watchedChangeCallback();
+    }
+  }
+
+  _watchlistChangeHandler() {
+    if (this._watchlistChangeCallback) {
+      this._watchlistChangeCallback();
+    }
   }
 }

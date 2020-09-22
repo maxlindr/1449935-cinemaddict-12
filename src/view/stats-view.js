@@ -5,9 +5,9 @@ export default class StatsView extends SmartView {
     super(stateData);
   }
 
-  _restoreHandlers() {}
-
   getTemplate() {
     return `${this._data.moviesCount} movies inside`;
   }
+
+  _restoreHandlers() {}
 }
