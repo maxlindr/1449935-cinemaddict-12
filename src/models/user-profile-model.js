@@ -1,5 +1,6 @@
 import Observable from '../observable';
-import {UpdateType} from '../constants';
+import {filters} from '../filters';
+import {BoardMode} from '../constants';
 
 const calcUserRank = (rating) => {
   if (rating === 0) {
@@ -26,17 +27,19 @@ export default class UserProfileModel extends Observable {
 
     this._rank = ``;
 
-    this._moviesModel.registerObserver((updateType) => {
-      if (updateType === UpdateType.ITEM) {
-        return;
+    this._moviesModel.registerObserver(() => {
+      const watchedFilter = filters[BoardMode.HISTORY];
+      const watchedMovies = watchedFilter(this._moviesModel.getAll());
+
+      const oldRank = this._rank;
+      this._rank = calcUserRank(watchedMovies.length);
+
+      if (oldRank !== this._rank) {
+        this._notify(null, {
+          avatarUrl: AVATAR_URL,
+          rank: this._rank
+        });
       }
-
-      this._rank = calcUserRank(this._moviesModel.getAll().length);
-
-      this._notify(null, {
-        avatarUrl: AVATAR_URL,
-        rank: this._rank
-      });
     });
   }
 
