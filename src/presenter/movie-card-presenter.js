@@ -63,7 +63,7 @@ export default class MovieCardPresenter {
 
   _watchedChangeHandler() {
     const watched = !this._movie.watched;
-    const watchingDate = watched ? new Date() : null;
+    const watchingDate = watched ? new Date() : new Date(0);
 
     this._updateMovieRequest(Object.assign({}, this._movie, {watched, watchingDate}));
   }

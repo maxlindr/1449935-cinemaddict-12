@@ -66,7 +66,7 @@ export default class MoviesModel extends Observable {
       user_details: {
         watchlist,
         already_watched: watched,
-        watching_date: watchingDate ? watchingDate.toISOString() : new Date(0).toISOString(),
+        watching_date: watchingDate.toISOString(),
         favorite
       }
     };

@@ -122,7 +122,7 @@ export default class MoviePopupPresenter {
 
   _watchedChangeHandler() {
     const watched = !this._movie.watched;
-    const watchingDate = watched ? new Date() : null;
+    const watchingDate = watched ? new Date() : new Date(0);
 
     const newMovie = Object.assign({}, this._movie, {watched, watchingDate});
 
