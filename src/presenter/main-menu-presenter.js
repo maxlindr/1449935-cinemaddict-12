@@ -22,9 +22,9 @@ export default class MainMenuPresenter {
 
     moviesModel.registerObserver(this._update);
 
-    filtersModel.registerObserver(() => {
+    filtersModel.registerObserver((mode) => {
       this._update();
-      this._filterClickCallback();
+      this._filterClickCallback(mode);
     });
 
     this._update();

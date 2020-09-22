@@ -19,6 +19,6 @@ export default class FiltersModel extends Observable {
 
   setActive(filterName) {
     this._activeFilterName = filterName;
-    this._notify(null, filters[this._activeFilterName]);
+    this._notify(filterName, filters[this._activeFilterName]);
   }
 }

@@ -125,15 +125,15 @@ export default class MovieList {
     }
   }
 
-  _filterChangeHandler(event, boardMode) {
-    if (this._boardMode === boardMode) {
+  _filterChangeHandler(event) {
+    if (this._boardMode === event) {
       return;
     }
 
     this._moviesSortBarView.updateData({sortType: SortType.DEFAULT});
     this._sortType = SortType.DEFAULT;
 
-    this._boardMode = boardMode;
+    this._boardMode = event;
     this._clearAllMoviesBoard();
     this._renderAllMovies();
   }
