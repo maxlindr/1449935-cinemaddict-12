@@ -146,16 +146,13 @@ export default class MovieList {
       this._renderBoard();
     } else if (updateType === UpdateType.ITEM) {
       this._updateMovie(updatedMovie);
-      this._clearMostCommentedBoard();
-      this._renderMostCommentedMovies();
+      this._redrawMostCommentedBoard();
     } else {
       this._updateMovie(updatedMovie);
       this._clearAllMoviesBoard();
-      this._clearMostCommentedBoard();
-      this._clearTopRatedBoard();
       this._renderAllMovies();
-      this._renderTopRatedMovies();
-      this._renderMostCommentedMovies();
+      this._redrawTopRatedBoard();
+      this._redrawMostCommentedBoard();
     }
   }
 
@@ -205,8 +202,8 @@ export default class MovieList {
 
     if (this._moviesModel.getAll().length > 0) {
       this._renderAllMoviesBoard();
-      this._renderTopRatedBoard();
-      this._renderMostCommentedBoard();
+      this._redrawTopRatedBoard();
+      this._redrawMostCommentedBoard();
     } else {
       render(this._boardsContainerView, this._noMoviesView, RenderPosition.BEFOREEND);
     }
@@ -225,9 +222,19 @@ export default class MovieList {
     });
   }
 
-  _renderTopRatedBoard() {
-    render(this._boardsContainerView, this._topRatedBoard, RenderPosition.BEFOREEND);
-    this._renderTopRatedMovies();
+  _redrawTopRatedBoard() {
+    const isNonZeroRatedMoviesExists = this._moviesModel.getAll().some((movie) => movie.rating > 0);
+    this._clearTopRatedBoard();
+
+    if (isNonZeroRatedMoviesExists) {
+      if (!this._boardsContainerView.getElement().contains(this._topRatedBoard.getElement())) {
+        render(this._boardsContainerView, this._topRatedBoard, RenderPosition.BEFOREEND);
+      }
+
+      this._renderTopRatedMovies();
+    } else {
+      this._topRatedBoard.destroy();
+    }
   }
 
   _renderTopRatedMovies() {
@@ -238,9 +245,19 @@ export default class MovieList {
     }
   }
 
-  _renderMostCommentedBoard() {
-    render(this._boardsContainerView, this._mostCommentedBoard, RenderPosition.BEFOREEND);
-    this._renderMostCommentedMovies();
+  _redrawMostCommentedBoard() {
+    const isCommentedMoviesExists = this._moviesModel.getAll().some((movie) => movie.comments.length > 0);
+    this._clearMostCommentedBoard();
+
+    if (isCommentedMoviesExists) {
+      if (!this._boardsContainerView.getElement().contains(this._mostCommentedBoard.getElement())) {
+        render(this._boardsContainerView, this._mostCommentedBoard, RenderPosition.BEFOREEND);
+      }
+
+      this._renderMostCommentedMovies();
+    } else {
+      this._mostCommentedBoard.destroy();
+    }
   }
 
   _renderMostCommentedMovies() {
