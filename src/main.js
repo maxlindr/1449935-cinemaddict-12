@@ -63,7 +63,7 @@ movieBoard.init(BoardMode.ALL);
 mainMenuPresenter.setStatsClickHandler(statisticsClickHandler);
 
 const statsContainer = document.querySelector(`.footer__statistics`);
-const shortStatsView = new StatsView(0);
+const shortStatsView = new StatsView();
 render(statsContainer, shortStatsView, RenderPosition.BEFOREEND);
 moviesModel.registerObserver((updateType) => {
   if (updateType !== UpdateType.ITEM) {
