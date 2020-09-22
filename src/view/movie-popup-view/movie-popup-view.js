@@ -4,7 +4,7 @@ import moment from 'moment';
 
 const joinArrayElementsToString = (arr) => arr.join(`, `);
 
-const formatMovieDate = (movieDate) => moment(movieDate).format(`D MMMM YYYY`);
+const formatMovieDate = (movieDate) => moment(movieDate).format(`DD MMMM YYYY`);
 
 const mapGenre = (genre) => `<span class="film-details__genre">${genre}</span>`;
 
