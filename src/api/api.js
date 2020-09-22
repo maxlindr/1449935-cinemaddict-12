@@ -21,22 +21,6 @@ export default class Api {
     this._authCredentials = authCredentials;
   }
 
-  _send({
-    url,
-    method = `GET`,
-    body = null,
-    headers = new Headers()
-  }) {
-    headers.append(`Authorization`, this._authCredentials);
-
-    return fetch(
-        `${this._endPoint}/${url}`,
-        {method, body, headers}
-    )
-      .then(checkStatus)
-      .catch(catchError);
-  }
-
   addComment(movieId, comment) {
     return this._send({
       url: `comments/${movieId}`,
@@ -84,5 +68,21 @@ export default class Api {
       headers: new Headers({"Content-Type": `application/json`})
     })
       .then(toJSON);
+  }
+
+  _send({
+    url,
+    method = `GET`,
+    body = null,
+    headers = new Headers()
+  }) {
+    headers.append(`Authorization`, this._authCredentials);
+
+    return fetch(
+        `${this._endPoint}/${url}`,
+        {method, body, headers}
+    )
+      .then(checkStatus)
+      .catch(catchError);
   }
 }

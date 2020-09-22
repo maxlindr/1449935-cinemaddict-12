@@ -18,6 +18,10 @@ export default class Provider {
     this._dirtyMovies = [];
   }
 
+  get dirty() {
+    return this._dirtyMovies.length > 0;
+  }
+
   getMovies() {
     if (Provider.isOnline()) {
       return this._api.getMovies()
@@ -110,9 +114,5 @@ export default class Provider {
 
   static isOnline() {
     return window.navigator.onLine;
-  }
-
-  get dirty() {
-    return this._dirtyMovies.length > 0;
   }
 }
