@@ -20,8 +20,8 @@ const distributeGenresByMoviesCount = (movies) => {
 };
 
 export default class StatisticsView extends SmartView {
-  constructor(data, statsIntervalChangeCallback = () => {}) {
-    super(data);
+  constructor(stateData, statsIntervalChangeCallback = () => {}) {
+    super(stateData);
 
     this.statsIntervalChangeCallback = statsIntervalChangeCallback;
     this._statsIntervalChangeHandler = this._statsIntervalChangeHandler.bind(this);
@@ -37,10 +37,10 @@ export default class StatisticsView extends SmartView {
     this.statsIntervalChangeCallback(evt.target.value);
   }
 
-  updateData(data) {
-    super.updateData(data);
+  updateData(statisticsData) {
+    super.updateData(statisticsData);
     const statisticCtx = document.querySelector(`.statistic__chart`);
-    drawChart(statisticCtx, distributeGenresByMoviesCount(data.movies));
+    drawChart(statisticCtx, distributeGenresByMoviesCount(statisticsData.movies));
   }
 
   getTemplate() {

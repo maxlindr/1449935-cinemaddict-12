@@ -3,8 +3,8 @@ import {BoardMode} from '../constants';
 
 const ACTIVE_ITEM_CLASSNAME = `main-navigation__item--active`;
 
-const createMainMenuTemplate = (data) => {
-  const {filtersCounts, mode} = data;
+const createMainMenuTemplate = (stateData) => {
+  const {filtersCounts, mode} = stateData;
 
   return (
     `<nav class="main-navigation">
@@ -20,8 +20,8 @@ const createMainMenuTemplate = (data) => {
 };
 
 export default class MainMenuView extends SmartView {
-  constructor(data) {
-    super(data);
+  constructor(stateData) {
+    super(stateData);
 
     this._filterChangeCallback = () => {};
     this._statsClickCallback = () => {};

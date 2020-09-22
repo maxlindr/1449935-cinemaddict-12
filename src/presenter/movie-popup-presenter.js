@@ -45,10 +45,10 @@ export default class MoviePopupPresenter {
     this._setState({online: this._getOnlineStatus()});
   }
 
-  _commentAddHandler(data) {
+  _commentAddHandler(comment) {
     const newComment = {
-      emoji: data.emoji,
-      message: data.message,
+      emoji: comment.emoji,
+      message: comment.message,
       date: new Date()
     };
 

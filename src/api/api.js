@@ -66,11 +66,11 @@ export default class Api {
       .then((comment) => comment.map(CommentsModel.adaptToClient));
   }
 
-  sync(data) {
+  sync(movies) {
     return this._send({
       url: `movies/sync`,
       method: `POST`,
-      body: JSON.stringify(data.map(MoviesModel.adaptToServer)),
+      body: JSON.stringify(movies.map(MoviesModel.adaptToServer)),
       headers: new Headers({"Content-Type": `application/json`})
     })
       .then(toJSON);

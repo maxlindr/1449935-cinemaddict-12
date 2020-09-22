@@ -47,17 +47,17 @@ export default class MainMenuPresenter {
       filtersCounts[name] = filter(movies).length;
     });
 
-    const data = {
+    const viewData = {
       filtersCounts,
       mode: this._mode
     };
 
     if (this._view) {
-      this._view.updateData(data);
+      this._view.updateData(viewData);
       return;
     }
 
-    this._view = new MainMenuView(data);
+    this._view = new MainMenuView(viewData);
     this._view.setActiveFilterChangeHandler(this._modeChangeHandler);
     this._view.setStatsClickHandler(this._statsClickHandler);
 

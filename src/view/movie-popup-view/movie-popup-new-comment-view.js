@@ -10,8 +10,8 @@ const mapEmojiToPreviewElementString = (emoji) => {
 };
 
 export default class MoviePopupNewCommentView extends SmartView {
-  constructor(data = {}, addCommentCallback = () => {}) {
-    super(data);
+  constructor(stateData = {}, addCommentCallback = () => {}) {
+    super(stateData);
 
     this._addCommentCallback = addCommentCallback;
 

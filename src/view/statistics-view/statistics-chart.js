@@ -3,12 +3,12 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 const BAR_HEIGHT = 50;
 
-export const drawChart = (statisticCtx, data) => {
+export const drawChart = (statisticCtx, chartData) => {
 
   const labels = [];
   const dataset = [];
 
-  data.forEach((entry) => {
+  chartData.forEach((entry) => {
     labels.push(entry.genre);
     dataset.push(entry.moviesCount);
   });

@@ -4,8 +4,8 @@ import {SortType} from '../constants';
 const ACTIVE_CLASSNAME = `sort__button--active`;
 
 export default class MoviesSortBarView extends SmartView {
-  constructor(data = {sortType: SortType.DEFAULT}) {
-    super(data);
+  constructor(stateData = {sortType: SortType.DEFAULT}) {
+    super(stateData);
 
     this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
   }

@@ -1,8 +1,8 @@
 import SmartView from '../abstract/smart-view';
 
 export default class MovieCardCommentsView extends SmartView {
-  constructor(data) {
-    super(data);
+  constructor(stateData) {
+    super(stateData);
 
     this._clickCallback = () => {};
 

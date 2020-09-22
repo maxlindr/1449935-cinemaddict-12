@@ -138,18 +138,18 @@ export default class MovieList {
     this._renderAllMovies();
   }
 
-  _modelEventHandler(updateType, data) {
+  _modelEventHandler(updateType, updatedMovie) {
     this._isLoading = false;
 
     if (updateType === UpdateType.INIT) {
       this._loadingView.destroy();
       this._renderBoard();
     } else if (updateType === UpdateType.ITEM) {
-      this._updateMovie(data);
+      this._updateMovie(updatedMovie);
       this._clearMostCommentedBoard();
       this._renderMostCommentedMovies();
     } else {
-      this._updateMovie(data);
+      this._updateMovie(updatedMovie);
       this._clearAllMoviesBoard();
       this._clearMostCommentedBoard();
       this._clearTopRatedBoard();
@@ -303,27 +303,27 @@ export default class MovieList {
     this._moviePopupPresentersMap.clear();
   }
 
-  _updateMovie(data) {
-    const movieId = data.id;
+  _updateMovie(movie) {
+    const movieId = movie.id;
 
     const moviePopup = this._moviePopupPresentersMap.get(movieId);
     if (moviePopup && moviePopup.active) {
-      moviePopup.update(data);
+      moviePopup.update(movie);
     }
 
     const generalMovie = this._generalMoviePresentersMap.get(movieId);
     if (generalMovie) {
-      generalMovie.update(data);
+      generalMovie.update(movie);
     }
 
     const topRatedMovie = this._topRatedMoviePresentersMap.get(movieId);
     if (topRatedMovie) {
-      topRatedMovie.update(data);
+      topRatedMovie.update(movie);
     }
 
     const mostCommentedMovie = this._mostCommentedMoviePresentersMap.get(movieId);
     if (mostCommentedMovie) {
-      mostCommentedMovie.update(data);
+      mostCommentedMovie.update(movie);
     }
   }
 

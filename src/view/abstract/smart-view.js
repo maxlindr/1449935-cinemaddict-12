@@ -1,9 +1,9 @@
 import AbstractView from "./abstract-view";
 
 export default class SmartView extends AbstractView {
-  constructor(data = {}) {
+  constructor(stateData = {}) {
     super();
-    this._data = data;
+    this._data = stateData;
   }
 
   updateData(update, onlyDataUpdating) {
@@ -23,8 +23,8 @@ export default class SmartView extends AbstractView {
     }
   }
 
-  _shouldElementUpdate(data) {
-    for (const [key, prop] of Object.entries(data)) {
+  _shouldElementUpdate(stateData) {
+    for (const [key, prop] of Object.entries(stateData)) {
       if (prop !== this._data[key]) {
         return true;
       }

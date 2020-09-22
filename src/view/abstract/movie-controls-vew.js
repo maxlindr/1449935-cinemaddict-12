@@ -1,8 +1,8 @@
 import SmartView from './smart-view';
 
 export default class MovieControlsView extends SmartView {
-  constructor(data) {
-    super(data);
+  constructor(stateData) {
+    super(stateData);
 
     this._favoriteClickCallback = null;
     this._watchedClickCallback = null;

@@ -29,8 +29,8 @@ const mapComment = (comment, disabled, deleting) => {
 };
 
 export default class MoviePopupCommentsListView extends SmartView {
-  constructor(data, deleteCallback = () => {}) {
-    super(data);
+  constructor(stateData, deleteCallback = () => {}) {
+    super(stateData);
 
     this._deleteClickCallback = deleteCallback;
 
