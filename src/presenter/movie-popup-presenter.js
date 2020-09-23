@@ -148,12 +148,11 @@ export default class MoviePopupPresenter {
 
     return this._api
       .updateMovie(movie)
-      .catch(console.error) // eslint-disable-line no-console
       .then(() => this.disable(false));
   }
 
-  _handleUpdateMovieRequestError(err) { // eslint-disable-line no-unused-vars
-    // console.error(err);
+  _handleUpdateMovieRequestError() {
+    //
   }
 
   _escapeKeyDownHandler(escDownEvt) {

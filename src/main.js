@@ -42,17 +42,14 @@ const mainMenuPresenter = new MainMenuPresenter(main, filtersModel, moviesModel)
 const statisticsPresenter = new StatisticsPresenter(main, moviesModel, userProfileModel);
 const movieBoard = new MovieList(main, filtersModel, moviesModel, commentsModel, apiWithProvider);
 
-let statisticsClickHandler;
-let filterClickHandler;
-
-statisticsClickHandler = () => {
+const statisticsClickHandler = () => {
   movieBoard.destroy();
   statisticsPresenter.init();
   mainMenuPresenter.setFilterClickHandler(filterClickHandler);
   mainMenuPresenter.removeStatsClickHandler();
 };
 
-filterClickHandler = (filter) => {
+const filterClickHandler = (filter) => {
   statisticsPresenter.destroy();
   movieBoard.init(filter);
   mainMenuPresenter.setStatsClickHandler(statisticsClickHandler);
@@ -101,12 +98,7 @@ commentsModel.registerObserver((eventType, payload) => {
 });
 
 window.addEventListener(`load`, () => {
-  navigator.serviceWorker.register(`/service-worker.js`)
-    .then(() => {
-      console.log(`ServiceWorker available`); // eslint-disable-line
-    }).catch((e) => {
-      console.error(e); // eslint-disable-line
-    });
+  navigator.serviceWorker.register(`/service-worker.js`);
 });
 
 window.addEventListener(`online`, () => {
