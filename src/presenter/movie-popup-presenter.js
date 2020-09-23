@@ -72,16 +72,17 @@ export default class MoviePopupPresenter {
     const commentsOperationsDisabled = disabled || !this._state.online;
     const comments = movie.comments.map((commentId) => this._commentsModel.get(commentId));
 
+    const commentsListViewData = {
+      comments,
+      disabled: commentsOperationsDisabled,
+      deletingId: this._state.deletingCommentId
+    };
+
     if (this._moviePopupVeiw) {
       this._controlsView.updateData(Object.assign({}, movie, {disabled}));
       this._commentsCountView.updateData({count: comments.length});
       this._newCommentView.updateData({disabled: commentsOperationsDisabled});
-
-      this._moviePopupCommentsListView.updateData({
-        comments,
-        disabled: commentsOperationsDisabled,
-        deletingId: this._state.deletingCommentId
-      });
+      this._moviePopupCommentsListView.updateData(commentsListViewData);
 
       if (this._state.disabled) {
         this._moviePopupVeiw.removeCloseHandler();
@@ -121,7 +122,7 @@ export default class MoviePopupPresenter {
     render(commentsContainer, this._commentsCountView, RenderPosition.AFTERBEGIN);
 
     this._moviePopupCommentsListView =
-        new MoviePopupCommentsListView({comments, disabled: commentsOperationsDisabled}, this._deleteCommentHandler);
+        new MoviePopupCommentsListView(commentsListViewData, this._deleteCommentHandler);
 
     render(commentsContainer, this._moviePopupCommentsListView, RenderPosition.BEFOREEND);
 

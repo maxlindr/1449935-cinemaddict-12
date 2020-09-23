@@ -28,6 +28,14 @@ const mapComment = (comment, disabled, deleting) => {
   );
 };
 
+const isCommentsEquals = (comments1, comments2) => {
+  if (comments1.length !== comments2.length) {
+    return false;
+  }
+
+  return comments1.every((comment, i) => comment.id === comments2[i].id);
+};
+
 export default class MoviePopupCommentsListView extends SmartView {
   constructor(stateData, deleteCallback = () => {}) {
     super(stateData);
@@ -51,6 +59,24 @@ export default class MoviePopupCommentsListView extends SmartView {
         ${this._data.comments.map((comment) => mapComment(comment, this._data.disabled, comment.id === this._data.deletingId)).join(`\n`)}
       </ul>`
     );
+  }
+
+  _shouldElementUpdate(newState) {
+    for (const [key, prop] of Object.entries(newState)) {
+      if (key === `comments`) {
+        if (isCommentsEquals(this._data.comments, newState.comments)) {
+          continue;
+        }
+
+        return true;
+      }
+
+      if (prop !== this._data[key]) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   _restoreHandlers() {
