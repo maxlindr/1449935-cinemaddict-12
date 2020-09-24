@@ -91,8 +91,7 @@ export default class MovieList {
 
     this._boardMode = boardMode;
 
-    this._clearAllMoviesBoard();
-    this._renderAllMovies();
+    this._redrawAllMoviesBoard();
   }
 
   destroy() {
@@ -208,6 +207,33 @@ export default class MovieList {
     });
   }
 
+  _checkBoardExists(board) {
+    return this._boardsContainerView.getElement().contains(board.getElement());
+  }
+
+  _redrawAllMoviesBoard() {
+    const isMoviesForGeneralBoardFound = this._getGeneralBoardMovies().length > 0;
+
+    if (isMoviesForGeneralBoardFound) {
+      this._noMoviesView.destroy();
+
+      if (!this._checkBoardExists(this._allMoviesBoardView)) {
+        render(this._boardsContainerView, this._allMoviesBoardView, RenderPosition.AFTERBEGIN);
+      } else {
+        this._clearAllMoviesBoard();
+      }
+
+      this._renderAllMovies();
+    } else {
+      if (this._checkBoardExists(this._allMoviesBoardView)) {
+        this._clearAllMoviesBoard();
+        this._allMoviesBoardView.destroy();
+      }
+
+      render(this._boardsContainerView, this._noMoviesView, RenderPosition.AFTERBEGIN);
+    }
+  }
+
   _redrawTopRatedBoard() {
     const isNonZeroRatedMoviesExists = this._moviesModel.getAll().some((movie) => movie.rating > 0);
     this._clearTopRatedBoard();
@@ -277,8 +303,7 @@ export default class MovieList {
 
     this._moviesSortBarView.updateData({sortType});
     this._sortType = sortType;
-    this._clearAllMoviesBoard();
-    this._renderAllMovies();
+    this._redrawAllMoviesBoard();
   }
 
   _clearAllMoviesBoard() {
@@ -339,8 +364,7 @@ export default class MovieList {
     this._sortType = SortType.DEFAULT;
 
     this._boardMode = event;
-    this._clearAllMoviesBoard();
-    this._renderAllMovies();
+    this._redrawAllMoviesBoard();
   }
 
   _modelEventHandler(updateType, updatedMovie) {
@@ -354,8 +378,7 @@ export default class MovieList {
       this._redrawMostCommentedBoard();
     } else {
       this._updateMovie(updatedMovie);
-      this._clearAllMoviesBoard();
-      this._renderAllMovies();
+      this._redrawAllMoviesBoard();
       this._redrawTopRatedBoard();
       this._redrawMostCommentedBoard();
     }
