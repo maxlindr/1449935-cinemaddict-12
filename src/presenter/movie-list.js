@@ -239,7 +239,7 @@ export default class MovieList {
     this._clearTopRatedBoard();
 
     if (isNonZeroRatedMoviesExists) {
-      if (!this._boardsContainerView.getElement().contains(this._topRatedBoard.getElement())) {
+      if (!this._checkBoardExists(this._topRatedBoard)) {
         render(this._boardsContainerView, this._topRatedBoard, RenderPosition.BEFOREEND);
       }
 
@@ -262,7 +262,7 @@ export default class MovieList {
     this._clearMostCommentedBoard();
 
     if (isCommentedMoviesExists) {
-      if (!this._boardsContainerView.getElement().contains(this._mostCommentedBoard.getElement())) {
+      if (!this._checkBoardExists(this._mostCommentedBoard)) {
         render(this._boardsContainerView, this._mostCommentedBoard, RenderPosition.BEFOREEND);
       }
 
