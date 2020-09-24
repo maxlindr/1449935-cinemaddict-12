@@ -12,7 +12,9 @@ export default class UserProfilePresenter {
     });
 
     render(container, this._view, RenderPosition.BEFOREEND);
+  }
 
+  init() {
     this._userProfileModel.registerObserver((updateType, payload) => {
       this._view.updateData(payload);
     });

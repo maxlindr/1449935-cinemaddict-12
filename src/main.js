@@ -35,7 +35,8 @@ const userProfileModel = new UserProfileModel(moviesModel);
 const header = document.querySelector(`.header`);
 const main = document.querySelector(`.main`);
 
-new UserProfilePresenter(header, userProfileModel); // eslint-disable-line no-new
+const userProfilePresenter = new UserProfilePresenter(header, userProfileModel);
+userProfilePresenter.init();
 
 const filtersModel = new FiltersModel();
 const mainMenuPresenter = new MainMenuPresenter(main, filtersModel, moviesModel);
