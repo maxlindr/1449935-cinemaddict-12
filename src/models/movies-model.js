@@ -33,19 +33,20 @@ export default class MoviesModel extends Observable {
   }
 
   static adaptToClient(movie) {
-    /* eslint-disable camelcase */
-    const {film_info, user_details, comments} = movie;
-    const {alternative_title, title, poster, age_rating, total_rating, director, writers, actors, release, description, runtime, genre} = film_info;
-    const {watchlist, already_watched, watching_date, favorite} = user_details;
+    const {comments} = movie;
+    const filmInfo = movie[`film_info`];
+    const userDetails = movie[`user_details`];
+    const {title, poster, director, writers, actors, release, description, runtime, genre} = filmInfo;
+    const {watchlist, favorite} = userDetails;
 
     return Object.assign(
         {},
         {
           id: movie.id,
-          title: alternative_title,
+          title: filmInfo[`alternative_title`],
           originalTitle: title,
           poster,
-          rating: total_rating,
+          rating: filmInfo[`total_rating`],
           director,
           writers,
           cast: actors,
@@ -54,12 +55,12 @@ export default class MoviesModel extends Observable {
           country: release.release_country,
           genres: genre,
           description,
-          ageRating: age_rating,
+          ageRating: filmInfo[`age_rating`],
           comments,
-          watched: already_watched,
+          watched: userDetails[`already_watched`],
           favorite,
           watchlist,
-          watchingDate: new Date(watching_date)
+          watchingDate: new Date(userDetails[`watching_date`])
         }
     );
   }
@@ -71,27 +72,27 @@ export default class MoviesModel extends Observable {
     return {
       id,
       comments,
-      film_info: {
+      [`film_info`]: {
         title: originalTitle,
-        alternative_title: title,
-        total_rating: rating,
+        [`alternative_title`]: title,
+        [`total_rating`]: rating,
         poster,
-        age_rating: ageRating,
+        [`age_rating`]: ageRating,
         director,
         writers,
         actors: cast,
         release: {
           date: releaseDate.toISOString(),
-          release_country: country
+          [`release_country`]: country
         },
         runtime: duration,
         genre: genres,
         description
       },
-      user_details: {
+      [`user_details`]: {
         watchlist,
-        already_watched: watched,
-        watching_date: watchingDate.toISOString(),
+        [`already_watched`]: watched,
+        [`watching_date`]: watchingDate.toISOString(),
         favorite
       }
     };
