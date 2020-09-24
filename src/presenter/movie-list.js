@@ -1,11 +1,11 @@
 import MoviesSortBarView from '../view/movies-sort-bar-view';
-import MoviesContainerView from '../view/movies-container';
-import AllMoviesBoardView from '../view/all-movies-board';
-import ShowMoreButtonView from '../view/show-more-button';
-import MoviesExtraBoardView from '../view/movies-extra-board';
+import MoviesContainerView from '../view/movies-container-view';
+import AllMoviesBoardView from '../view/all-movies-board-view';
+import ShowMoreButtonView from '../view/show-more-button-view';
+import MoviesExtraBoardView from '../view/movies-extra-board-view';
 import MoviePopupPresenter from './movie-popup-presenter';
 import MovieCardPresenter from './movie-card-presenter';
-import NoMoviesView from '../view/no-movies';
+import NoMoviesView from '../view/no-movies-view';
 import LoadingView from '../view/loading-view';
 import {render, RenderPosition} from '../render.js';
 import ArrayChunkIterator from '../array-chunk-iterator';
