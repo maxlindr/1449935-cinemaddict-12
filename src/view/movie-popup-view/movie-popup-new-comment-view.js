@@ -115,7 +115,7 @@ export default class MoviePopupNewCommentView extends SmartView {
 
   // обработчик на нажатие Ctrl/Command + Enter
   _keyDownHandler(evt) {
-    if (!evt.ctrlKey || evt.key !== `Enter`) {
+    if (!(evt.ctrlKey || evt.metaKey) || evt.key !== `Enter`) {
       return;
     }
 
