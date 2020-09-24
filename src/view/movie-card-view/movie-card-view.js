@@ -2,13 +2,14 @@ import SmartView from '../abstract/smart-view';
 import {formatDuration} from '../../utils.js';
 
 const DESCRIPTION_TRIM_THRESHOLD_LENGTH = 140;
+const STRING_BEGIN_INDEX = 0;
 
 const createMovieCardTemplate = (movieDto) => {
   const year = movieDto.releaseDate.getFullYear();
   const fullDescription = movieDto.description;
   const shortDescription = fullDescription.length <= DESCRIPTION_TRIM_THRESHOLD_LENGTH
     ? fullDescription
-    : fullDescription.substring(0, DESCRIPTION_TRIM_THRESHOLD_LENGTH) + `…`;
+    : fullDescription.substring(STRING_BEGIN_INDEX, DESCRIPTION_TRIM_THRESHOLD_LENGTH) + `…`;
 
   return (
     `<article class="film-card">
