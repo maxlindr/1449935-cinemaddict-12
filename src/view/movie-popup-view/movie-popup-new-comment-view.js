@@ -119,8 +119,8 @@ export default class MoviePopupNewCommentView extends SmartView {
       return;
     }
 
-    const commentInput = this.getElement().querySelector(`.film-details__comment-input`);
-    const isCommentInputValid = commentInput.checkValidity();
+    const commentInputElement = this.getElement().querySelector(`.film-details__comment-input`);
+    const isCommentInputValid = commentInputElement.checkValidity();
 
     if (this._data.emoji && isCommentInputValid) {
       this._addCommentHandler();
@@ -132,7 +132,7 @@ export default class MoviePopupNewCommentView extends SmartView {
     }
 
     if (!isCommentInputValid) {
-      commentInput.reportValidity();
+      commentInputElement.reportValidity();
     }
   }
 }

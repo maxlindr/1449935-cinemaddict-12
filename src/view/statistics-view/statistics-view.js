@@ -29,8 +29,8 @@ export default class StatisticsView extends SmartView {
 
   updateData(statisticsData) {
     super.updateData(statisticsData);
-    const statisticCtx = document.querySelector(`.statistic__chart`);
-    drawChart(statisticCtx, distributeGenresByMoviesCount(statisticsData.movies));
+    const statisticCtxElement = document.querySelector(`.statistic__chart`);
+    drawChart(statisticCtxElement, distributeGenresByMoviesCount(statisticsData.movies));
   }
 
   getTemplate() {

@@ -46,8 +46,8 @@ export default class MoviePopupCommentsListView extends SmartView {
   }
 
   showError(commentId) {
-    const commentsList = Array.from(this.getElement().querySelectorAll(`.film-details__comment`));
-    const commentElement = commentsList.find((item) => item.dataset.id === commentId);
+    const commentsElementsList = Array.from(this.getElement().querySelectorAll(`.film-details__comment`));
+    const commentElement = commentsElementsList.find((item) => item.dataset.id === commentId);
 
     commentElement.style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT_IN_SEC}s`;
     setTimeout(() => (commentElement.style.animation = ``), SHAKE_ANIMATION_TIMEOUT);

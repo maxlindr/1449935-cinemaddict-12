@@ -14,7 +14,7 @@ import {SortType, UpdateType, BoardMode} from '../constants';
 const ALL_MOVIES_BOARD_CARDS_PORTION_COUNT = 5;
 const EXTRA_BOARDS_MOVIES_CARDS_COUNT = 2;
 
-const body = document.querySelector(`body`);
+const bodyElement = document.querySelector(`body`);
 
 /**
  * Проверяет имеется ли разница в следующих свойствах сравниваемых фильмов: favorite, watched, watchlist
@@ -123,7 +123,7 @@ export default class MovieList {
       if (moviePopup) {
         moviePopup.update(movieData);
       } else {
-        moviePopup = new MoviePopupPresenter(body, movieData, this._commentsModel, this._api);
+        moviePopup = new MoviePopupPresenter(bodyElement, movieData, this._commentsModel, this._api);
         moviePopup.setChangeHandler(this._viewActionHandler);
         this._moviePopupPresentersMap.set(movie.id, moviePopup);
 

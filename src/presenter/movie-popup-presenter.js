@@ -116,20 +116,20 @@ export default class MoviePopupPresenter {
     render(this._moviePopupVeiw.getElement().querySelector(`.form-details__top-container`),
         this._controlsView, RenderPosition.BEFOREEND);
 
-    const commentsContainer = this._moviePopupVeiw.getElement().querySelector(`.film-details__comments-wrap`);
+    const commentsContainerElement = this._moviePopupVeiw.getElement().querySelector(`.film-details__comments-wrap`);
 
     this._commentsCountView = new MoviePopupCommentsCountView({count: movie.comments.length});
-    render(commentsContainer, this._commentsCountView, RenderPosition.AFTERBEGIN);
+    render(commentsContainerElement, this._commentsCountView, RenderPosition.AFTERBEGIN);
 
     this._moviePopupCommentsListView =
         new MoviePopupCommentsListView(commentsListViewData, this._deleteCommentHandler);
 
-    render(commentsContainer, this._moviePopupCommentsListView, RenderPosition.BEFOREEND);
+    render(commentsContainerElement, this._moviePopupCommentsListView, RenderPosition.BEFOREEND);
 
     this._newCommentView =
         new MoviePopupNewCommentView({disabled: commentsOperationsDisabled}, this._commentAddHandler);
 
-    render(commentsContainer, this._newCommentView, RenderPosition.BEFOREEND);
+    render(commentsContainerElement, this._newCommentView, RenderPosition.BEFOREEND);
 
     render(this._container, this._moviePopupVeiw, RenderPosition.BEFOREEND);
   }

@@ -32,16 +32,16 @@ const moviesModel = new MoviesModel();
 const commentsModel = new CommentsModel();
 const userProfileModel = new UserProfileModel(moviesModel);
 
-const header = document.querySelector(`.header`);
-const main = document.querySelector(`.main`);
+const headerElement = document.querySelector(`.header`);
+const mainElement = document.querySelector(`.main`);
 
-const userProfilePresenter = new UserProfilePresenter(header, userProfileModel);
+const userProfilePresenter = new UserProfilePresenter(headerElement, userProfileModel);
 userProfilePresenter.init();
 
 const filtersModel = new FiltersModel();
-const mainMenuPresenter = new MainMenuPresenter(main, filtersModel, moviesModel);
-const statisticsPresenter = new StatisticsPresenter(main, moviesModel, userProfileModel);
-const movieBoard = new MovieList(main, filtersModel, moviesModel, commentsModel, apiWithProvider);
+const mainMenuPresenter = new MainMenuPresenter(mainElement, filtersModel, moviesModel);
+const statisticsPresenter = new StatisticsPresenter(mainElement, moviesModel, userProfileModel);
+const movieBoard = new MovieList(mainElement, filtersModel, moviesModel, commentsModel, apiWithProvider);
 
 const statisticsClickHandler = () => {
   movieBoard.destroy();
@@ -60,9 +60,9 @@ const filterClickHandler = (filter) => {
 movieBoard.init(BoardMode.ALL);
 mainMenuPresenter.setStatsClickHandler(statisticsClickHandler);
 
-const statsContainer = document.querySelector(`.footer__statistics`);
+const statsContainerElement = document.querySelector(`.footer__statistics`);
 const shortStatsView = new StatsView();
-render(statsContainer, shortStatsView, RenderPosition.BEFOREEND);
+render(statsContainerElement, shortStatsView, RenderPosition.BEFOREEND);
 moviesModel.registerObserver((updateType) => {
   if (updateType !== UpdateType.ITEM) {
     shortStatsView.updateData({moviesCount: moviesModel.getAll().length});
