@@ -8,7 +8,7 @@ const createMovieCardTemplate = (movieDto) => {
   const fullDescription = movieDto.description;
   const shortDescription = fullDescription.length <= DESCRIPTION_TRIM_THRESHOLD_LENGTH
     ? fullDescription
-    : fullDescription.substring(0, 140) + `…`;
+    : fullDescription.substring(0, DESCRIPTION_TRIM_THRESHOLD_LENGTH) + `…`;
 
   return (
     `<article class="film-card">
