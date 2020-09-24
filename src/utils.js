@@ -13,6 +13,6 @@ export const createElement = (template) => {
  * @return {string} Отформатированная строка
  */
 export const formatDuration = (duration) => {
-  const durationObj = moment.duration(duration, `minutes`);
-  return `${durationObj.hours()}h ${durationObj.minutes()}m`;
+  const momentDuration = moment.duration(duration, `minutes`);
+  return `${momentDuration.hours()}h ${momentDuration.minutes()}m`;
 };
