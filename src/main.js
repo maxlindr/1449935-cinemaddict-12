@@ -3,7 +3,7 @@ import UserProfileModel from './models/user-profile-model';
 import UserProfilePresenter from './presenter/user-profile-presenter';
 import StatisticsPresenter from './presenter/statistics-presenter';
 import StatsView from './view/stats-view';
-import MovieList from './presenter/movie-list';
+import MovieListPresenter from './presenter/movie-list-presenter';
 import {render, RenderPosition} from './render.js';
 import MoviesModel from './models/movies-model';
 import CommentsModel from './models/comments-model';
@@ -41,10 +41,10 @@ userProfilePresenter.init();
 const filtersModel = new FiltersModel();
 const mainMenuPresenter = new MainMenuPresenter(mainElement, filtersModel, moviesModel);
 const statisticsPresenter = new StatisticsPresenter(mainElement, moviesModel, userProfileModel);
-const movieBoard = new MovieList(mainElement, filtersModel, moviesModel, commentsModel, apiWithProvider);
+const movieListPresenter = new MovieListPresenter(mainElement, filtersModel, moviesModel, commentsModel, apiWithProvider);
 
 const statisticsClickHandler = () => {
-  movieBoard.destroy();
+  movieListPresenter.destroy();
   statisticsPresenter.init();
   mainMenuPresenter.setFilterClickHandler(filterClickHandler);
   mainMenuPresenter.removeStatsClickHandler();
@@ -52,12 +52,12 @@ const statisticsClickHandler = () => {
 
 const filterClickHandler = (filter) => {
   statisticsPresenter.destroy();
-  movieBoard.init(filter);
+  movieListPresenter.init(filter);
   mainMenuPresenter.setStatsClickHandler(statisticsClickHandler);
   mainMenuPresenter.removeFilterClickHandler();
 };
 
-movieBoard.init(BoardMode.ALL);
+movieListPresenter.init(BoardMode.ALL);
 mainMenuPresenter.setStatsClickHandler(statisticsClickHandler);
 
 const statsContainerElement = document.querySelector(`.footer__statistics`);

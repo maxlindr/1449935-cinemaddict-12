@@ -30,7 +30,7 @@ const testMovieStatusChanged = (movie1, movie2) => {
   );
 };
 
-export default class MovieList {
+export default class MovieListPresenter {
   constructor(container, filtersModel, moviesModel, commentsModel, api) {
     this._container = container;
     this._filtersModel = filtersModel;
